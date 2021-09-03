@@ -1,4 +1,6 @@
-export const TOP = 'TOP';
-export const BOTTOM = 'BOTTOM';
-export const LEFT = 'LEFT';
-export const RIGHT = 'RIGHT';
+export enum ChangeDirectionActions  {
+  CHANGE_DIRECTION_TOP = 'TOP',
+  CHANGE_DIRECTION_BOTTOM = 'BOTTOM',
+  CHANGE_DIRECTION_LEFT = 'LEFT',
+  CHANGE_DIRECTION_RIGHT = 'RIGHT',
+}

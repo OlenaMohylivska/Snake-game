@@ -1,24 +1,30 @@
 import { combineReducers, AnyAction } from 'redux';
+import { ChangeDirectionActions } from './types';
 
 const positionHandler = (state = [81], action: AnyAction) => {
   const updatedState = [...state];
+
   switch (action.type) {
-    case 'TOP':
+    case ChangeDirectionActions.CHANGE_DIRECTION_TOP:
       updatedState.push(updatedState[updatedState.length - 1] - 15);
-      updatedState.shift()  
-      return updatedState 
-    case 'BOTTOM':
+      updatedState.shift();
+
+      return updatedState;
+    case ChangeDirectionActions.CHANGE_DIRECTION_BOTTOM:
       updatedState.push(updatedState[updatedState.length - 1] + 15);
-      updatedState.shift()  
-      return updatedState
-    case 'LEFT':
+      updatedState.shift();
+
+      return updatedState;
+    case ChangeDirectionActions.CHANGE_DIRECTION_LEFT:
       updatedState.push(updatedState[updatedState.length - 1] - 1);
-      updatedState.shift()  
-      return updatedState
-    case 'RIGHT':
+      updatedState.shift();
+        
+      return updatedState;
+    case ChangeDirectionActions.CHANGE_DIRECTION_RIGHT:
       updatedState.push(updatedState[updatedState.length - 1] + 1);
-      updatedState.shift()  
-      return updatedState
+      updatedState.shift();
+
+      return updatedState;
     default: return state;
   }
 }
