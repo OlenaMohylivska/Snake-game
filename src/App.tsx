@@ -1,9 +1,14 @@
 import React from 'react';
+import { GameField } from './components/GameField/GameField';
+import { GameFieldSize } from './components/GameFieldSize/GameFieldSize';
+import './App.css'
 
-function App() {
+
+export const App: React.FC = () => {
   return (
-    <div>Snake game</div>
+    <>
+      <GameFieldSize />
+      <GameField />
+    </>
   );
 }
-
-export default App;
