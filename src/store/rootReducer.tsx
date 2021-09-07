@@ -1,42 +1,108 @@
-import { combineReducers, AnyAction } from 'redux';
-import { ChangeDirectionActions } from './types';
+import { createReducer } from '@reduxjs/toolkit';
+import { ChangeDirectionActions, ChangeNumberCellsActions, SetDirectionActions } from './types';
 
-const positionHandler = (state = [81], action: AnyAction) => {
-  const updatedState = [...state];
-
-  switch (action.type) {
-    case ChangeDirectionActions.CHANGE_DIRECTION_TOP:
-      updatedState.push(updatedState[updatedState.length - 1] - 15);
-      updatedState.shift();
-
-      return updatedState;
-    case ChangeDirectionActions.CHANGE_DIRECTION_BOTTOM:
-      updatedState.push(updatedState[updatedState.length - 1] + 15);
-      updatedState.shift();
-
-      return updatedState;
-    case ChangeDirectionActions.CHANGE_DIRECTION_LEFT:
-      updatedState.push(updatedState[updatedState.length - 1] - 1);
-      updatedState.shift();
-        
-      return updatedState;
-    case ChangeDirectionActions.CHANGE_DIRECTION_RIGHT:
-      updatedState.push(updatedState[updatedState.length - 1] + 1);
-      updatedState.shift();
-
-      return updatedState;
-    default: return state;
-  }
+export interface IState {
+  position: number[],
+  counter: number,
+  size: {
+    columns: number,
+    rows: number
+  },
+  direction: string
 }
 
-function scoreCounter(state = 0, action: AnyAction) {
-  switch (action.type) {
-    case 'INCREASE_SCORE': return state = state + 1;
-    default: return state;
-  }
+export const initialState: IState = {
+  position: [1],
+  counter: 0,
+  size: {
+    columns: 15,
+    rows: 15
+  },
+  direction: 'RIGHT'
 }
 
-export const rootReducer = combineReducers({
-  position: positionHandler,
-  counter: scoreCounter
+export const rootReducer = createReducer(initialState, {
+  [ChangeDirectionActions.CHANGE_DIRECTION_TOP]: (state) => {
+    const positionCopy = [...state.position];
+    positionCopy.push(positionCopy[positionCopy.length - 1] - state.size.columns);
+    positionCopy.shift();
+
+    return {
+      ...state,
+      position: positionCopy
+    };
+  },
+  [ChangeDirectionActions.CHANGE_DIRECTION_BOTTOM]: (state) => {
+    const positionCopy = [...state.position];
+    positionCopy.push(positionCopy[positionCopy.length - 1] + state.size.columns);
+    positionCopy.shift();
+
+    return {
+      ...state,
+      position: positionCopy
+    };
+  },
+  [ChangeDirectionActions.CHANGE_DIRECTION_LEFT]: (state) => {
+    const positionCopy = [...state.position];
+    positionCopy.push(positionCopy[positionCopy.length - 1] - 1);
+    positionCopy.shift();
+
+    return {
+      ...state,
+      position: positionCopy
+    };
+  },
+  [ChangeDirectionActions.CHANGE_DIRECTION_RIGHT]: (state) => {
+    const positionCopy = [...state.position];
+    positionCopy.push(positionCopy[positionCopy.length - 1] + 1);
+    positionCopy.shift();
+
+    return {
+      ...state,
+      position: positionCopy,
+      isMoving: true
+    };
+  },
+  [ChangeNumberCellsActions.CHANGE_NUMBER_COLUMNS]: (state, action) => {
+    return {
+      ...state,
+      size: {
+        columns: action.payload,
+        rows: state.size.rows
+      }
+    };
+  },
+  [ChangeNumberCellsActions.CHANGE_NUMBER_ROWS]: (state, action) => {
+    return {
+      ...state,
+      size: {
+        columns: state.size.columns,
+        rows: action.payload
+      }
+    };
+  },
+  [SetDirectionActions.SET_DIRECTION_TOP]: (state, action) => {
+    return {
+      ...state,
+      direction: action.payload
+    };
+  },
+  [SetDirectionActions.SET_DIRECTION_RIGHT]: (state, action) => {
+    return {
+      ...state,
+      direction: action.payload
+    };
+  },
+  [SetDirectionActions.SET_DIRECTION_BOTTOM]: (state, action) => {
+    return {
+      ...state,
+      direction: action.payload
+    };
+  },
+  [SetDirectionActions.SET_DIRECTION_LEFT]: (state, action) => {
+    return {
+      ...state,
+      direction: action.payload
+    };
+  },
 })
