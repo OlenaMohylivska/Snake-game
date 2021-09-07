@@ -1,5 +1,5 @@
 import React from 'react';
-import GameField from './components/GameField/GameField';
+import { GameField } from './components/GameField/GameField';
 import { GameFieldSize } from './components/GameFieldSize/GameFieldSize';
 import './App.css'
 

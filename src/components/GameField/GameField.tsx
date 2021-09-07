@@ -5,7 +5,7 @@ import { IState } from './../../store/rootReducer';
 import clsx from 'clsx';
 import './GameField.css'
 
-const GameField: React.FC = () => {
+export const GameField: React.FC = () => {
 	const snakePosition = useSelector((state: IState) => state.position);
 	const fieldSize = useSelector((state: IState) => state.size);
 	const dispatch = useDispatch();
@@ -56,6 +56,7 @@ const GameField: React.FC = () => {
 	}, []);
 
 	return (
+		<div className="first">
 		<div
 			className='game-board'
 			style={{
@@ -63,6 +64,7 @@ const GameField: React.FC = () => {
 				gridTemplateRows: `repeat(${fieldSize.rows}, 40px)`
 			}}
 		>
+
 			{fieldCells.map(fieldCell => {
 				let isCellSnakeBody = false;
 				if (snakePosition.find(snakeCell => snakeCell === fieldCell)) {
@@ -75,7 +77,6 @@ const GameField: React.FC = () => {
 				</div>
 			})}
 		</div>
+		</div>
 	)
 }
-
-export default GameField;

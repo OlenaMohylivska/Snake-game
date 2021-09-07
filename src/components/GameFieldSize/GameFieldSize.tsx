@@ -36,21 +36,23 @@ export const GameFieldSize: React.FC = () => {
     }
   }
 
-  console.log(movingDirection);
+  // console.log(movingDirection);
 
-  const intervalId = setInterval(() => {
+  // const intervalId = setInterval(() => {
 
-    console.log('gg');
+  //   console.log('gg');
 
-    dispatch({ type: movingDirection });
-  }, 1000)
+  //   dispatch({ type: movingDirection });
+  // }, 1000)
   
-  console.log(intervalId);
+  // console.log(intervalId);
 
-  useEffect(() =>  {
-    clearInterval(intervalId)
-  }, [intervalId])
-  useEffect(() => () => clearInterval(intervalId), []);
+  // useEffect(() =>  {
+  //   clearInterval(intervalId)
+  // }, [intervalId])
+  // useEffect(() => () => clearInterval(intervalId), []);
+
+
   const toStartGame = () => {
 
   }
