@@ -21,8 +21,7 @@ export const GameFieldSize: React.FC = () => {
       return;
     }
     setIsSizeError(false)
-
-    return dispatch(changeNumberOfColumns(value));
+    dispatch(changeNumberOfColumns(value));
   }
 
   const handleChangeRows = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,7 +34,7 @@ export const GameFieldSize: React.FC = () => {
     }
     setIsSizeError(false)
 
-    return dispatch(changeNumberOfRows(value));
+    dispatch(changeNumberOfRows(value));
   }
 
 const toGamingPage = () => {

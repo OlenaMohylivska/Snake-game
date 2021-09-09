@@ -6,11 +6,11 @@ import { IState } from './../../store/rootReducer';
 import clsx from 'clsx';
 import './GameField.scss'
 
-interface Props {
+interface IProps {
   isLayout: boolean
 }
 
-export const GameField: React.FC<Props> = ({ isLayout }) => {
+export const GameField: React.FC<IProps> = ({ isLayout }) => {
 	const snakePosition = useSelector((state: IState) => state.position);
 	const fieldSize = useSelector((state: IState) => state.size);
 	const movingDirection = useSelector((state: IState) => state.direction);

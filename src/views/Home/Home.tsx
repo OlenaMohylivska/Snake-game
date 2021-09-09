@@ -6,7 +6,7 @@ export const Home: React.FC = () => {
   return (
     <>
       <GameFieldSize />
-      <GameField isLayout={true} />
+      <GameField isLayout />
     </>
   )
 }
