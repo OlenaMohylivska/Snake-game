@@ -1,0 +1,12 @@
+.game-field-form {
+  width: 650px;
+  height: 85px;
+  margin: 10px auto;
+  display: flex;
+  justify-content: space-around;
+  align-items: baseline;
+
+  .start-button {
+    min-width: 120px;
+  }
+}

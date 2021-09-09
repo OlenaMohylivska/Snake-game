@@ -64,6 +64,7 @@ export const rootReducer = createReducer(initialState, {
     };
   },
   [ChangeNumberCellsActions.CHANGE_NUMBER_COLUMNS]: (state, action) => {
+    
     return {
       ...state,
       size: {
@@ -73,6 +74,7 @@ export const rootReducer = createReducer(initialState, {
     };
   },
   [ChangeNumberCellsActions.CHANGE_NUMBER_ROWS]: (state, action) => {
+    
     return {
       ...state,
       size: {
@@ -81,28 +83,19 @@ export const rootReducer = createReducer(initialState, {
       }
     };
   },
-  [SetDirectionActions.SET_DIRECTION_TOP]: (state, action) => {
+  [SetDirectionActions.SET_DIRECTION]: (state, action) => {
+
+    if ((state.direction === 'RIGHT' && action.payload === 'LEFT')
+      || (state.direction === 'LEFT' && action.payload === 'RIGHT')
+      || (state.direction === 'TOP' && action.payload === 'BOTTOM')
+      || (state.direction === 'BOTTOM' && action.payload === 'TOP')) {
+
+      return;
+    }
+
     return {
       ...state,
       direction: action.payload
     };
-  },
-  [SetDirectionActions.SET_DIRECTION_RIGHT]: (state, action) => {
-    return {
-      ...state,
-      direction: action.payload
-    };
-  },
-  [SetDirectionActions.SET_DIRECTION_BOTTOM]: (state, action) => {
-    return {
-      ...state,
-      direction: action.payload
-    };
-  },
-  [SetDirectionActions.SET_DIRECTION_LEFT]: (state, action) => {
-    return {
-      ...state,
-      direction: action.payload
-    };
-  },
+  }
 })

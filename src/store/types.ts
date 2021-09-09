@@ -11,8 +11,5 @@ export enum ChangeNumberCellsActions {
 }
 
 export enum SetDirectionActions {
-  SET_DIRECTION_TOP = 'SET_TOP',
-  SET_DIRECTION_BOTTOM = 'SET_BOTTOM',
-  SET_DIRECTION_LEFT = 'SET_LEFT',
-  SET_DIRECTION_RIGHT = 'SET_RIGHT',
+  SET_DIRECTION = 'SET_DIRECTION'
 }
