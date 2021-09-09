@@ -1,13 +1,19 @@
 import React, { useEffect, useMemo, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setDirectionRight, setDirectionLeft, setDirectionBottom, setDirectionTop } from './../../store/actions';
+import { useInterval } from 'react-interval-hook';
+import { setDirection } from './../../store/actions';
 import { IState } from './../../store/rootReducer';
 import clsx from 'clsx';
-import './GameField.css'
+import './GameField.scss'
 
-export const GameField: React.FC = () => {
+interface Props {
+  isLayout: boolean
+}
+
+export const GameField: React.FC<Props> = ({ isLayout }) => {
 	const snakePosition = useSelector((state: IState) => state.position);
 	const fieldSize = useSelector((state: IState) => state.size);
+	const movingDirection = useSelector((state: IState) => state.direction);
 	const dispatch = useDispatch();
 
 	const fieldCells = useMemo(() => {
@@ -19,31 +25,16 @@ export const GameField: React.FC = () => {
 		return result;
 	}, [fieldSize])
 
-	// const onKeyDownListener = useCallback((event: KeyboardEvent) => {
-		
-	// 	switch (event.key) {
-	// 		case 'ArrowUp':
-	// 			return dispatch(moveTopAction());
-	// 		case 'ArrowDown':
-	// 			return dispatch(moveBottomAction());
-	// 		case 'ArrowLeft':
-	// 			return dispatch(moveLeftAction());
-	// 		case 'ArrowRight':			
-	// 			return dispatch(moveRightAction());
-	// 	}
-	// }, [dispatch]);
-
 	const onKeyDownListener = useCallback((event: KeyboardEvent) => {
-		
 		switch (event.key) {
 			case 'ArrowUp':
-				return dispatch(setDirectionTop('TOP'));
-			case 'ArrowDown':			
-				return dispatch(setDirectionBottom('BOTTOM'));
+				return dispatch(setDirection('TOP'));
+			case 'ArrowDown':
+				return dispatch(setDirection('BOTTOM'));
 			case 'ArrowLeft':
-				return dispatch(setDirectionLeft('LEFT'));
-			case 'ArrowRight':			
-				return dispatch(setDirectionRight('RIGHT'));
+				return dispatch(setDirection('LEFT'));
+			case 'ArrowRight':
+				return dispatch(setDirection('RIGHT'));
 		}
 	}, [dispatch]);
 
@@ -55,28 +46,35 @@ export const GameField: React.FC = () => {
 		}
 	}, []);
 
-	return (
-		<div className="first">
-		<div
-			className='game-board'
-			style={{
-				gridTemplateColumns: `repeat(${fieldSize.columns}, 40px)`,
-				gridTemplateRows: `repeat(${fieldSize.rows}, 40px)`
-			}}
-		>
+	useInterval(() => {
+      dispatch({ type: movingDirection });
+    }, 400, 
+		{
+			autoStart: !isLayout,
+		}
+		);
 
-			{fieldCells.map(fieldCell => {
-				let isCellSnakeBody = false;
-				if (snakePosition.find(snakeCell => snakeCell === fieldCell)) {
-					isCellSnakeBody = true
-				}
-				return <div
-					className={clsx('field', fieldCell % 2 === 0 ? 'even' : 'odd', isCellSnakeBody && 'snake-body')}
-					key={fieldCell}>
-					{fieldCell}
-				</div>
-			})}
-		</div>
+	return (
+		<div className="game-board-wrapper">
+			<div
+				className='game-board'
+				style={{
+					gridTemplateColumns: `repeat(${fieldSize.columns}, 40px)`,
+					gridTemplateRows: `repeat(${fieldSize.rows}, 40px)`
+				}}
+			>
+				{fieldCells.map(fieldCell => {
+					let isCellSnakeBody = false;
+					if (snakePosition.find(snakeCell => snakeCell === fieldCell)) {
+						isCellSnakeBody = true
+					}
+					return <div
+						className={clsx('field', fieldCell % 2 === 0 ? 'even' : 'odd', !isLayout && isCellSnakeBody && 'snake-body')}
+						key={fieldCell}>
+						{fieldCell}
+					</div>
+				})}
+			</div>
 		</div>
 	)
 }

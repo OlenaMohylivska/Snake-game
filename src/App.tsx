@@ -1,14 +1,14 @@
 import React from 'react';
-import { GameField } from './components/GameField/GameField';
-import { GameFieldSize } from './components/GameFieldSize/GameFieldSize';
-import './App.css'
-
+import { BrowserRouter } from 'react-router-dom';
+import { AppRouter } from './router/AppRouter';
+import './App.scss';
 
 export const App: React.FC = () => {
   return (
     <>
-      <GameFieldSize />
-      <GameField />
+    <BrowserRouter>
+      <AppRouter />
+    </BrowserRouter>
     </>
   );
 }
