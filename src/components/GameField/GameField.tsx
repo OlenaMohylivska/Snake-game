@@ -1,29 +1,13 @@
-import React, { useEffect, useMemo, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useInterval } from 'react-interval-hook';
 import { setDirection } from './../../store/actions';
 import { IState } from './../../store/rootReducer';
-import clsx from 'clsx';
-import './GameField.scss'
+import { Board } from './../Board';
 
-interface IProps {
-  isLayout: boolean
-}
-
-export const GameField: React.FC<IProps> = ({ isLayout }) => {
-	const snakePosition = useSelector((state: IState) => state.position);
-	const fieldSize = useSelector((state: IState) => state.size);
+export const GameField: React.FC = () => {
 	const movingDirection = useSelector((state: IState) => state.direction);
 	const dispatch = useDispatch();
-
-	const fieldCells = useMemo(() => {
-		const result = [];
-		const numberOfCells = fieldSize.columns * fieldSize.rows;
-		for (let i = 1; i <= numberOfCells; i++) {
-			result.push(i)
-		}
-		return result;
-	}, [fieldSize])
 
 	const onKeyDownListener = useCallback((event: KeyboardEvent) => {
 		switch (event.key) {
@@ -48,33 +32,9 @@ export const GameField: React.FC<IProps> = ({ isLayout }) => {
 
 	useInterval(() => {
       dispatch({ type: movingDirection });
-    }, 400, 
-		{
-			autoStart: !isLayout,
-		}
-		);
+    }, 400);
 
 	return (
-		<div className="game-board-wrapper">
-			<div
-				className='game-board'
-				style={{
-					gridTemplateColumns: `repeat(${fieldSize.columns}, 40px)`,
-					gridTemplateRows: `repeat(${fieldSize.rows}, 40px)`
-				}}
-			>
-				{fieldCells.map(fieldCell => {
-					let isCellSnakeBody = false;
-					if (snakePosition.find(snakeCell => snakeCell === fieldCell)) {
-						isCellSnakeBody = true
-					}
-					return <div
-						className={clsx('field', fieldCell % 2 === 0 ? 'even' : 'odd', !isLayout && isCellSnakeBody && 'snake-body')}
-						key={fieldCell}>
-						{fieldCell}
-					</div>
-				})}
-			</div>
-		</div>
+		<Board snake />
 	)
 }

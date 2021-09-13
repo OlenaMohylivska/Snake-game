@@ -1,0 +1,21 @@
+:root {
+  $green-color: rgb(39, 221, 39);
+  $lime-color: rgb(123, 255, 47);
+  $black-color: black;
+
+  .cell {
+  box-shadow: 0px 0px 0px 1px $black-color;
+  }
+
+  .green {
+    background-color: $green-color;
+  }
+
+  .lime {
+    background-color: $lime-color;
+  }
+
+  .black {
+    background-color: $black-color;
+  }
+}

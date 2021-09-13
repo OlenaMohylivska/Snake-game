@@ -1,23 +1,18 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Home } from '../views/Home';
 import { Game } from '../views/Game';
 
 export const AppRouter: React.FC = () => {
   return (
     <>
-      <Route exact path="/">
-        <Home />
-      </Route>
-
-      <Route path="/playing">
-        <Game />
-      </Route>
-
-      <Route exact path="/result">
-        <Game />
-      </Route>
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route path="/playing" component={Game} />
+          <Route path="/result" />
+        </Switch>
+      </BrowserRouter>
     </>
   )
-
 }

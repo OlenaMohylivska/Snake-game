@@ -37,45 +37,45 @@ export const GameFieldSize: React.FC = () => {
     dispatch(changeNumberOfRows(value));
   }
 
-const toGamingPage = () => {
-  history.push('./playing')
-}
+  const toGamingPage = () => {
+    history.push('./playing')
+  }
 
-return (
-  <form className='game-field-form' autoComplete='off'>
-    <TextField
-      type='number'
-      id='columns-input'
-      defaultValue={fieldSize.columns}
-      label='Columns'
-      margin='normal'
-      variant='outlined'
-      onChange={handleChangeColumns}
-      size='small'
-      error={isSizeError}
-      helperText={isSizeError && 'From 10 to 25'}
-    />
-    <TextField
-      type='number'
-      id='rows-input'
-      defaultValue={fieldSize.rows}
-      label='Rows'
-      margin='normal'
-      variant='outlined'
-      onChange={handleChangeRows}
-      size='small'
-      error={isSizeError}
-      helperText={isSizeError && 'From 10 to 15'}
-    />
+  return (
+    <form className='game-field-form' autoComplete='off'>
+      <TextField
+        type='number'
+        id='columns-input'
+        defaultValue={fieldSize.columns}
+        label='Columns'
+        margin='normal'
+        variant='outlined'
+        onChange={handleChangeColumns}
+        size='small'
+        error={isSizeError}
+        helperText={isSizeError && 'From 10 to 25'}
+      />
+      <TextField
+        type='number'
+        id='rows-input'
+        defaultValue={fieldSize.rows}
+        label='Rows'
+        margin='normal'
+        variant='outlined'
+        onChange={handleChangeRows}
+        size='small'
+        error={isSizeError}
+        helperText={isSizeError && 'From 10 to 15'}
+      />
 
-    <Button
-      className='start-button'
-      variant='contained'
-      color='primary'
-      size='large'
-      onClick={toGamingPage}>
-      Start
-    </Button>
-  </form>
-)
+      <Button
+        className='start-button'
+        variant='contained'
+        color='primary'
+        size='large'
+        onClick={toGamingPage}>
+        Start
+      </Button>
+    </form>
+  )
 }

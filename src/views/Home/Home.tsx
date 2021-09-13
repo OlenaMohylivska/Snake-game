@@ -1,12 +1,12 @@
 import React from 'react';
-import { GameField } from '../../components/GameField';
 import { GameFieldSize } from '../../components/GameFieldSize';
+import { Board } from './../../components/Board/Board';
 
 export const Home: React.FC = () => {
   return (
     <>
       <GameFieldSize />
-      <GameField isLayout />
+      <Board snake={false} />
     </>
   )
 }
