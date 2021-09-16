@@ -10,6 +10,6 @@ export enum ChangeNumberCellsActions {
   CHANGE_NUMBER_COLUMNS = 'COLUMNS',
 }
 
-export enum SetDirectionActions {
-  SET_DIRECTION = 'SET_DIRECTION'
-}
+export const SetDirectionAction = 'SET_DIRECTION';
+
+export const SetFruitPositionAction = 'SET_FRUIT_POSITION';

@@ -1,6 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { ChangeDirectionActions, ChangeNumberCellsActions, SetDirectionActions } from './types';
-
+import { ChangeDirectionActions, ChangeNumberCellsActions, SetDirectionAction, SetFruitPositionAction } from './types';
 export interface IState {
   position: number[],
   counter: number,
@@ -8,7 +7,8 @@ export interface IState {
     columns: number,
     rows: number
   },
-  direction: string
+  direction: string,
+  fruitPosition: number
 }
 
 export const initialState: IState = {
@@ -18,14 +18,18 @@ export const initialState: IState = {
     columns: 15,
     rows: 15
   },
-  direction: 'RIGHT'
+  direction: 'RIGHT',
+  fruitPosition: 0
 }
 
 export const rootReducer = createReducer(initialState, {
   [ChangeDirectionActions.CHANGE_DIRECTION_TOP]: (state) => {
     const positionCopy = [...state.position];
     positionCopy.push(positionCopy[positionCopy.length - 1] - state.size.columns);
-    positionCopy.shift();
+    
+    if(!positionCopy.find(el => el === state.fruitPosition)) {
+      positionCopy.shift();
+    }
 
     return {
       ...state,
@@ -35,7 +39,10 @@ export const rootReducer = createReducer(initialState, {
   [ChangeDirectionActions.CHANGE_DIRECTION_BOTTOM]: (state) => {
     const positionCopy = [...state.position];
     positionCopy.push(positionCopy[positionCopy.length - 1] + state.size.columns);
-    positionCopy.shift();
+
+    if(!positionCopy.find(el => el === state.fruitPosition)) {
+      positionCopy.shift();
+    }
 
     return {
       ...state,
@@ -45,7 +52,10 @@ export const rootReducer = createReducer(initialState, {
   [ChangeDirectionActions.CHANGE_DIRECTION_LEFT]: (state) => {
     const positionCopy = [...state.position];
     positionCopy.push(positionCopy[positionCopy.length - 1] - 1);
-    positionCopy.shift();
+    
+    if(!positionCopy.find(el => el === state.fruitPosition)) {
+      positionCopy.shift();
+    }
 
     return {
       ...state,
@@ -55,7 +65,10 @@ export const rootReducer = createReducer(initialState, {
   [ChangeDirectionActions.CHANGE_DIRECTION_RIGHT]: (state) => {
     const positionCopy = [...state.position];
     positionCopy.push(positionCopy[positionCopy.length - 1] + 1);
-    positionCopy.shift();
+   
+    if(!positionCopy.find(el => el === state.fruitPosition)) {
+      positionCopy.shift();
+    }
 
     return {
       ...state,
@@ -83,7 +96,7 @@ export const rootReducer = createReducer(initialState, {
       }
     };
   },
-  [SetDirectionActions.SET_DIRECTION]: (state, action) => {
+  [SetDirectionAction]: (state, action) => {
 
     if ((state.direction === 'RIGHT' && action.payload === 'LEFT')
       || (state.direction === 'LEFT' && action.payload === 'RIGHT')
@@ -97,5 +110,12 @@ export const rootReducer = createReducer(initialState, {
       ...state,
       direction: action.payload
     };
-  }
+  },
+  [SetFruitPositionAction]: (state, action) => {
+    
+    return {
+      ...state,
+      fruitPosition: action.payload
+    };
+  },
 })

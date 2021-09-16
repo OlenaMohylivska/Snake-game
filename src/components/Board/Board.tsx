@@ -10,6 +10,7 @@ interface IProps {
 
 export const Board: React.FC<IProps> = ({snake}) => {
   const snakePosition = useSelector((state: IState) => state.position);
+  const fruitPosition = useSelector((state: IState) => state.fruitPosition);
   const fieldSize = useSelector((state: IState) => state.size);
 
   const FieldColor = useMemo(() => {
@@ -47,6 +48,9 @@ export const Board: React.FC<IProps> = ({snake}) => {
           FieldColor.map((color, index) => {
             if (snake && snakePosition.find(snakeCell => snakeCell === index + 1)) {
               color = 'black'
+            }
+            if(snake && fruitPosition === index + 1) {
+              color = 'red';
             }
           return <Cell key={index} color={color} /> })
         }
