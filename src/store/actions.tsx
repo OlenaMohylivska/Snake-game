@@ -1,4 +1,4 @@
-import { ChangeDirectionActions, ChangeNumberCellsActions, SetDirectionAction, SetFruitPositionAction } from './types'
+import { ChangeDirectionActions, ChangeNumberCellsActions, SetDirectionAction, SetFruitPositionAction, setTimerInfoAction, resetStateAction } from './types'
 import { createAction } from '@reduxjs/toolkit';
 
 export const moveTopAction = createAction(ChangeDirectionActions.CHANGE_DIRECTION_TOP);
@@ -9,3 +9,5 @@ export const changeNumberOfColumns = createAction<number>(ChangeNumberCellsActio
 export const changeNumberOfRows = createAction<number>(ChangeNumberCellsActions.CHANGE_NUMBER_ROWS);
 export const setDirection = createAction<string>(SetDirectionAction);
 export const setFruitPosition = createAction<number>(SetFruitPositionAction);
+export const setTimerInfo = createAction<string>(setTimerInfoAction);
+export const resetState = createAction(resetStateAction);

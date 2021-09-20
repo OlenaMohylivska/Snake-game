@@ -1,5 +1,9 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { ChangeDirectionActions, ChangeNumberCellsActions, SetDirectionAction, SetFruitPositionAction } from './types';
+import { ChangeDirectionActions, 
+  ChangeNumberCellsActions, 
+  SetDirectionAction, 
+  SetFruitPositionAction, 
+  setTimerInfoAction } from './types';
 export interface IState {
   position: number[],
   counter: number,
@@ -8,7 +12,8 @@ export interface IState {
     rows: number
   },
   direction: string,
-  fruitPosition: number
+  fruitPosition: number,
+  timerInfo: string,
 }
 
 export const initialState: IState = {
@@ -19,7 +24,8 @@ export const initialState: IState = {
     rows: 15
   },
   direction: 'RIGHT',
-  fruitPosition: 0
+  fruitPosition: 0,
+  timerInfo: '',
 }
 
 export const rootReducer = createReducer(initialState, {
@@ -116,6 +122,13 @@ export const rootReducer = createReducer(initialState, {
     return {
       ...state,
       fruitPosition: action.payload
+    };
+  },
+  [setTimerInfoAction]: (state, action) => {
+    
+    return {
+      ...state,
+      timerInfo: action.payload
     };
   },
 })

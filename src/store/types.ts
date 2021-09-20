@@ -11,5 +11,6 @@ export enum ChangeNumberCellsActions {
 }
 
 export const SetDirectionAction = 'SET_DIRECTION';
-
 export const SetFruitPositionAction = 'SET_FRUIT_POSITION';
+export const setTimerInfoAction = 'SET_TIMER_INFO';
+export const resetStateAction = 'RESET_STATE';
