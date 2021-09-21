@@ -1,14 +1,20 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { IState } from './../../store/rootReducer';
 import { Button } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
+import { resetState, resetGameProgress } from './../../store/actions';
 import './Result.scss';
 
 export const Result: React.FC = () => {
   const snakePosition = useSelector((state: IState) => state.position);
   const timerInfo = useSelector((state: IState) => state.timerInfo);
   const history = useHistory();
+  const dispatch = useDispatch();
+
+  if(Number(localStorage.getItem('bestScore')) < snakePosition.length - 1) {
+    localStorage.setItem('bestScore', `${snakePosition.length - 1}`);
+  }
 
   return (
     <div className='result-page'>
@@ -20,20 +26,39 @@ export const Result: React.FC = () => {
           <span className='title'>You score is: </span>
           <span className='score-data'>{snakePosition.length - 1}</span>
         </div>
+        <div className='best-score-container'>
+          <span className='title'>Best score: </span>
+          <span className='score-data'>{localStorage.getItem('bestScore')}</span>
+        </div>
         <div className='time-container'>
           <span className='title'>You time is: </span>
           <span className='score-data'>{timerInfo}</span>
         </div>
       </div>
+      <div className='buttons-wrapper'>
       <Button
-        className='try-again-button'
+        className='button'
         variant='contained'
         color='primary'
         size='large'
-        onClick={() => history.push('./')}
+        onClick={() =>{          
+          dispatch(resetState())
+          history.push('./')}}
       >
         To main menu
       </Button>
+      <Button
+        className='button'
+        variant='contained'
+        color='primary'
+        size='large'
+        onClick={() =>{          
+          dispatch(resetGameProgress())         
+          history.push('./playing')}}
+      >
+        Try again
+      </Button>
+      </div> 
     </div>
   )
 }

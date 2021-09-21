@@ -3,7 +3,11 @@ import { ChangeDirectionActions,
   ChangeNumberCellsActions, 
   SetDirectionAction, 
   SetFruitPositionAction, 
-  setTimerInfoAction } from './types';
+  setTimerInfoAction,
+  resetStateAction,
+  resetGameProgressAction,
+  setUserNameAction
+ } from './types';
 export interface IState {
   position: number[],
   counter: number,
@@ -14,6 +18,7 @@ export interface IState {
   direction: string,
   fruitPosition: number,
   timerInfo: string,
+  userName: string,
 }
 
 export const initialState: IState = {
@@ -26,6 +31,7 @@ export const initialState: IState = {
   direction: 'RIGHT',
   fruitPosition: 0,
   timerInfo: '',
+  userName: '',
 }
 
 export const rootReducer = createReducer(initialState, {
@@ -131,4 +137,28 @@ export const rootReducer = createReducer(initialState, {
       timerInfo: action.payload
     };
   },
+  [resetStateAction]: (state) => {
+    
+    return {
+      ...initialState,
+      userName: state.userName,
+    };
+  },
+  [resetGameProgressAction]: (state) => {
+    
+    return {
+      ...initialState,
+      size: state.size,
+      userName: state.userName,
+    }
+  },
+  [setUserNameAction]: (state, action) => {
+    
+    return {
+      ...state,
+      userName: action.payload,
+    }
+  },
 })
+
+

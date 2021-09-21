@@ -28,7 +28,7 @@ export const GameField: React.FC = () => {
 
 	const randomFruit: () => number = () => {
 		const numberOfCells = fieldSize.columns * fieldSize.rows;
-		const randomFruitCell = Math.floor(Math.random() * numberOfCells);
+		const randomFruitCell = Math.floor(Math.random() * (numberOfCells - 1) + 1);
 
 		if (snakePosition.find(el => el === randomFruitCell)) {
 			return randomFruit()

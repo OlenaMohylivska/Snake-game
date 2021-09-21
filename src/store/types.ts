@@ -14,3 +14,5 @@ export const SetDirectionAction = 'SET_DIRECTION';
 export const SetFruitPositionAction = 'SET_FRUIT_POSITION';
 export const setTimerInfoAction = 'SET_TIMER_INFO';
 export const resetStateAction = 'RESET_STATE';
+export const resetGameProgressAction = 'RESET_GAME_PROGRESS';
+export const setUserNameAction = 'SET_USER_NAME';
