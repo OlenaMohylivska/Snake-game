@@ -1,80 +1,130 @@
-import React, { useEffect, useMemo, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useInterval } from 'react-interval-hook';
-import { setDirection } from './../../store/actions';
-import { IState } from './../../store/rootReducer';
-import clsx from 'clsx';
-import './GameField.scss'
+import React, { useEffect, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useInterval } from "react-interval-hook";
+import { useHistory } from "react-router-dom";
+import {
+  setDirection,
+  setFruitPosition,
+  setSnakePosition,
+} from "../../store/actions";
+import { IState } from "./../../store/rootReducer";
+import { Board } from "./../Board";
+import { ROUTES } from "./../../routes";
+import { hasDuplicates } from "../../utils";
+import { MovingDirectionActions } from "../../store/types";
 
-interface IProps {
-  isLayout: boolean
+interface IArguments {
+  snakePosition: number[];
+  fieldSize: { columns: number; rows: number };
 }
 
-export const GameField: React.FC<IProps> = ({ isLayout }) => {
-	const snakePosition = useSelector((state: IState) => state.position);
-	const fieldSize = useSelector((state: IState) => state.size);
-	const movingDirection = useSelector((state: IState) => state.direction);
-	const dispatch = useDispatch();
+const moveValidators: {
+  [key in MovingDirectionActions]: (options: IArguments) => boolean;
+} = {
+  [MovingDirectionActions.TOP]: ({ snakePosition, fieldSize }) =>
+    snakePosition[snakePosition.length - 1] < fieldSize.columns,
+  [MovingDirectionActions.BOTTOM]: ({ snakePosition, fieldSize }) =>
+    snakePosition[snakePosition.length - 1] >
+    fieldSize.columns * fieldSize.rows - fieldSize.columns,
+  [MovingDirectionActions.LEFT]: ({ snakePosition, fieldSize }) =>
+    (snakePosition[snakePosition.length - 1] - 1) % fieldSize.columns === 0,
+  [MovingDirectionActions.RIGHT]: ({ snakePosition, fieldSize }) =>
+    snakePosition[snakePosition.length - 1] % fieldSize.columns === 0,
+};
 
-	const fieldCells = useMemo(() => {
-		const result = [];
-		const numberOfCells = fieldSize.columns * fieldSize.rows;
-		for (let i = 1; i <= numberOfCells; i++) {
-			result.push(i)
-		}
-		return result;
-	}, [fieldSize])
+const defineSnakePosition: {
+  [key in MovingDirectionActions]: (options: IArguments) => number[];
+} = {
+  [MovingDirectionActions.TOP]: ({ snakePosition, fieldSize }) => [
+    ...snakePosition,
+    snakePosition[snakePosition.length - 1] - fieldSize.columns,
+  ],
+  [MovingDirectionActions.BOTTOM]: ({ snakePosition, fieldSize }) => [
+    ...snakePosition,
+    snakePosition[snakePosition.length - 1] + fieldSize.columns,
+  ],
+  [MovingDirectionActions.LEFT]: ({ snakePosition }) => [
+    ...snakePosition,
+    snakePosition[snakePosition.length - 1] - 1,
+  ],
+  [MovingDirectionActions.RIGHT]: ({ snakePosition }) => [
+    ...snakePosition,
+    snakePosition[snakePosition.length - 1] + 1,
+  ],
+};
 
-	const onKeyDownListener = useCallback((event: KeyboardEvent) => {
-		switch (event.key) {
-			case 'ArrowUp':
-				return dispatch(setDirection('TOP'));
-			case 'ArrowDown':
-				return dispatch(setDirection('BOTTOM'));
-			case 'ArrowLeft':
-				return dispatch(setDirection('LEFT'));
-			case 'ArrowRight':
-				return dispatch(setDirection('RIGHT'));
-		}
-	}, [dispatch]);
+export const GameField: React.FC = () => {
+  const movingDirection = useSelector((state: IState) => state.direction);
+  const fieldSize = useSelector((state: IState) => state.size);
+  const snakePosition = useSelector((state: IState) => state.position);
+  const fruitPosition = useSelector((state: IState) => state.fruitPosition);
+  const dispatch = useDispatch();
+  const history = useHistory();
 
-	useEffect(() => {
-		document.addEventListener('keydown', onKeyDownListener);
+  const onKeyDownListener = useCallback(
+    (event: KeyboardEvent) => {
+      switch (event.key) {
+        case "ArrowUp":
+          return dispatch(setDirection(MovingDirectionActions.TOP));
+        case "ArrowDown":
+          return dispatch(setDirection(MovingDirectionActions.BOTTOM));
+        case "ArrowLeft":
+          return dispatch(setDirection(MovingDirectionActions.LEFT));
+        case "ArrowRight":
+          return dispatch(setDirection(MovingDirectionActions.RIGHT));
+      }
+    },
+    [dispatch]
+  );
 
-		return () => {
-			document.removeEventListener('keydown', onKeyDownListener);
-		}
-	}, []);
+  const randomFruit = () => {
+    const numberOfCells = fieldSize.columns * fieldSize.rows;
+    let randomFruitCell = Math.floor(Math.random() * (numberOfCells - 1) + 1);
 
-	useInterval(() => {
-      dispatch({ type: movingDirection });
-    }, 400, 
-		{
-			autoStart: !isLayout,
-		}
-		);
+    while (snakePosition.includes(randomFruitCell)) {
+      if (numberOfCells > randomFruitCell + 1) {
+        randomFruitCell += 1;
+      } else {
+        randomFruitCell -= 100;
+      }
+    }
 
-	return (
-		<div className="game-board-wrapper">
-			<div
-				className='game-board'
-				style={{
-					gridTemplateColumns: `repeat(${fieldSize.columns}, 40px)`,
-					gridTemplateRows: `repeat(${fieldSize.rows}, 40px)`
-				}}
-			>
-				{fieldCells.map(fieldCell => {
-					let isCellSnakeBody = false;
-					if (snakePosition.find(snakeCell => snakeCell === fieldCell)) {
-						isCellSnakeBody = true
-					}
-					return <div
-						className={clsx('field', fieldCell % 2 === 0 ? 'even' : 'odd', !isLayout && isCellSnakeBody && 'snake-body')}
-						key={fieldCell}>
-						{fieldCell}
-					</div>
-				})}
-			</div>
-		</div>
-	)
-}
+    return randomFruitCell;
+  };
+
+  const interval = useInterval(() => {
+    if (hasDuplicates(snakePosition)) {
+      history.push(ROUTES.RESULT);
+      return;
+    }
+
+    if (moveValidators[movingDirection]({ snakePosition, fieldSize })) {
+      history.push(ROUTES.RESULT);
+    } else {
+      const positionCopy = defineSnakePosition[movingDirection]({
+        snakePosition,
+        fieldSize,
+      });
+      if (!positionCopy.find((el) => el === fruitPosition)) {
+        positionCopy.shift();
+      }
+
+      dispatch(setSnakePosition(positionCopy));
+    }
+  }, 300);
+
+  useEffect(() => {
+    document.addEventListener("keydown", onKeyDownListener);
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDownListener);
+      interval.stop();
+    };
+  }, []);
+
+  useEffect(() => {
+    dispatch(setFruitPosition(randomFruit()));
+  }, [snakePosition.length]);
+
+  return <Board snake />;
+};

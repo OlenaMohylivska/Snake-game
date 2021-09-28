@@ -1,0 +1,12 @@
+.box {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.stepper {
+  width: 50%;
+  margin: 0 auto;
+}

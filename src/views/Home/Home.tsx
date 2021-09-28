@@ -1,12 +1,19 @@
-import React from 'react';
-import { GameField } from '../../components/GameField';
-import { GameFieldSize } from '../../components/GameFieldSize';
+import React, { useEffect } from 'react';
+import { fetchUser } from '../../store/asyncActions';
+import { useDispatch } from 'react-redux';
+import { HomeStepper } from '../../components/HomeStepper';
+
 
 export const Home: React.FC = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchUser());
+  }, [dispatch])
+
   return (
     <>
-      <GameFieldSize />
-      <GameField isLayout />
+    <HomeStepper />
     </>
   )
 }

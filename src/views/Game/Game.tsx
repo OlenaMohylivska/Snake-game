@@ -7,7 +7,7 @@ export const Game: React.FC = () => {
   return (
     <div className='game-wrapper'>
       <ScoreInfo />
-      <GameField isLayout />
+      <GameField />
     </div>
   )
 }
