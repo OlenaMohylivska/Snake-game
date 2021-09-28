@@ -13,7 +13,7 @@ import {
 import { useDispatch } from 'react-redux';
 import { useDebouncedCallback } from "use-debounce";
 import { setUserName } from '../../store/actions';
-import { getAllNamesFromLS } from '../../utils';
+import { getAllNamesFromLS, } from '../../utils';
 import './SwitchUserName.scss';
 
 export const SwitchUserName: React.FC = () => {
