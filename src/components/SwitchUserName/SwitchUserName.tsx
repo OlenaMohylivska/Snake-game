@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   FormControl,
   RadioGroup,
@@ -8,18 +8,18 @@ import {
   InputLabel,
   Select,
   MenuItem,
-} from "@material-ui/core";
-import { useDispatch } from "react-redux";
-import { useDebouncedCallback } from "use-debounce";
-import { setUserName } from "../../store/actions";
-import { getAllNamesFromLS } from "../../utils";
-import "./SwitchUserName.scss";
+} from '@material-ui/core';
+import { useDispatch } from 'react-redux';
+import { useDebouncedCallback } from 'use-debounce';
+import { setUserName } from '../../store/actions';
+import { getAllNamesFromLS } from '../../utils';
+import './SwitchUserName.scss';
 
 export const SwitchUserName: React.FC = () => {
-  const [wayToChooseName, setWayToChooseName] = useState("random");
+  const [wayToChooseName, setWayToChooseName] = useState('random');
   const dispatch = useDispatch();
 
-  const debounced = useDebouncedCallback((event) => {    
+  const debounced = useDebouncedCallback((event) => {
     dispatch(setUserName({ name: event.target.value }));
   }, 1000);
 
@@ -28,51 +28,51 @@ export const SwitchUserName: React.FC = () => {
   };
 
   return (
-    <FormControl className="fieldset">
-      <div className="fieldset-wrapper">
+    <FormControl className='fieldset'>
+      <div className='fieldset-wrapper'>
         <RadioGroup
           row
-          className="radio"
-          aria-label="userName"
-          defaultValue="random"
-          name="radio-buttons-group"
+          className='radio'
+          aria-label='userName'
+          defaultValue='random'
+          name='radio-buttons-group'
           onChange={(event) => setWayToChooseName(event.target.value)}
         >
           <FormControlLabel
-            value="random"
+            value='random'
             control={<Radio />}
-            label="Random name"
+            label='Random name'
           />
           <FormControlLabel
-            value="enter"
+            value='enter'
             control={<Radio />}
-            label="Enter name"
+            label='Enter name'
           />
           <FormControlLabel
-            value="select"
+            value='select'
             control={<Radio />}
-            label="Select name"
+            label='Select name'
           />
         </RadioGroup>
 
-        {wayToChooseName === "enter" ? (
+        {wayToChooseName === 'enter' ? (
           <TextField
-            className="name-field"
-            label="Enter your name"
-            variant="outlined"
-            size="medium"
+            className='name-field'
+            label='Enter your name'
+            variant='outlined'
+            size='medium'
             onChange={debounced}
           />
         ) : null}
 
-        {wayToChooseName === "select" ? (
+        {wayToChooseName === 'select' ? (
           <FormControl>
-            <InputLabel className="select-label">Select name</InputLabel>
+            <InputLabel className='select-label'>Select name</InputLabel>
 
             <Select
-              className="name-field"
+              className='name-field'
               onChange={selectUserName}
-              variant="outlined"
+              variant='outlined'
             >
               {getAllNamesFromLS().map((el, index) => (
                 <MenuItem key={index} value={el}>

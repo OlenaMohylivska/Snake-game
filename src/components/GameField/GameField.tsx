@@ -1,17 +1,17 @@
-import React, { useEffect, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useInterval } from "react-interval-hook";
-import { useHistory } from "react-router-dom";
+import React, { useEffect, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useInterval } from 'react-interval-hook';
+import { useHistory } from 'react-router-dom';
 import {
   setDirection,
   setFruitPosition,
   setSnakePosition,
-} from "../../store/actions";
-import { IState } from "./../../store/rootReducer";
-import { Board } from "./../Board";
-import { ROUTES } from "./../../routes";
-import { hasDuplicates } from "../../utils";
-import { MovingDirectionActions } from "../../store/types";
+} from '../../store/actions';
+import { IState } from './../../store/rootReducer';
+import { Board } from './../Board';
+import { ROUTES } from './../../routes';
+import { hasDuplicates } from '../../utils';
+import { MovingDirectionActions } from '../../store/types';
 
 interface IArguments {
   snakePosition: number[];
@@ -64,13 +64,13 @@ export const GameField: React.FC = () => {
   const onKeyDownListener = useCallback(
     (event: KeyboardEvent) => {
       switch (event.key) {
-        case "ArrowUp":
+        case 'ArrowUp':
           return dispatch(setDirection(MovingDirectionActions.TOP));
-        case "ArrowDown":
+        case 'ArrowDown':
           return dispatch(setDirection(MovingDirectionActions.BOTTOM));
-        case "ArrowLeft":
+        case 'ArrowLeft':
           return dispatch(setDirection(MovingDirectionActions.LEFT));
-        case "ArrowRight":
+        case 'ArrowRight':
           return dispatch(setDirection(MovingDirectionActions.RIGHT));
       }
     },
@@ -114,10 +114,10 @@ export const GameField: React.FC = () => {
   }, 300);
 
   useEffect(() => {
-    document.addEventListener("keydown", onKeyDownListener);
+    document.addEventListener('keydown', onKeyDownListener);
 
     return () => {
-      document.removeEventListener("keydown", onKeyDownListener);
+      document.removeEventListener('keydown', onKeyDownListener);
       interval.stop();
     };
   }, []);

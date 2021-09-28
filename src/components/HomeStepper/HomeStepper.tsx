@@ -1,14 +1,19 @@
-import React, { useState, useCallback } from "react";
-import { Box, MobileStepper, Button } from "@material-ui/core";
-import { SwitchUserName } from "./../SwitchUserName/SwitchUserName";
-import { GameFieldSize } from "./../GameFieldSize/GameFieldSize";
-import { Board } from "./../Board/Board";
-import { StartGame } from "./../StartGame/StartGame";
-import "./HomeStepper.scss";
+import React, { useState, useCallback } from 'react';
+import { Box, MobileStepper, Button } from '@material-ui/core';
+import { SwitchUserName } from './../SwitchUserName/SwitchUserName';
+import { GameFieldSize } from './../GameFieldSize/GameFieldSize';
+import { Board } from './../Board/Board';
+import { StartGame } from './../StartGame/StartGame';
+import './HomeStepper.scss';
 
 const steps = [
   { component: <SwitchUserName /> },
-  { component: [<GameFieldSize key='GameFieldSize' />, <Board key='Board' snake={false} />] },
+  {
+    component: [
+      <GameFieldSize key='GameFieldSize' />,
+      <Board key='Board' snake={false} />,
+    ],
+  },
   { component: <StartGame /> },
 ];
 
@@ -25,13 +30,13 @@ export const HomeStepper: React.FC = () => {
   }, [activeStep]);
 
   return (
-    <Box className="box">
+    <Box className='box'>
       <Box>{steps[activeStep].component}</Box>
       <MobileStepper
-        className="stepper"
-        variant="text"
+        className='stepper'
+        variant='text'
         steps={maxSteps}
-        position="static"
+        position='static'
         activeStep={activeStep}
         nextButton={
           <Button onClick={handleNext} disabled={activeStep === maxSteps - 1}>

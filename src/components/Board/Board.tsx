@@ -5,10 +5,10 @@ import { Cell } from './../Cell';
 import './Board.scss';
 
 interface IProps {
-  snake: boolean
+  snake: boolean;
 }
 
-export const Board: React.FC<IProps> = ({snake}) => {
+export const Board: React.FC<IProps> = ({ snake }) => {
   const snakePosition = useSelector((state: IState) => state.position);
   const fruitPosition = useSelector((state: IState) => state.fruitPosition);
   const fieldSize = useSelector((state: IState) => state.size);
@@ -33,7 +33,7 @@ export const Board: React.FC<IProps> = ({snake}) => {
       }
     }
     return result;
-  }, [fieldSize])
+  }, [fieldSize]);
 
   return (
     <div className='board-wrapper'>
@@ -41,20 +41,22 @@ export const Board: React.FC<IProps> = ({snake}) => {
         className='board'
         style={{
           gridTemplateColumns: `repeat(${fieldSize.columns}, 40px)`,
-          gridTemplateRows: `repeat(${fieldSize.rows}, 40px)`
+          gridTemplateRows: `repeat(${fieldSize.rows}, 40px)`,
         }}
       >
-        {
-          FieldColor.map((color, index) => {
-            if (snake && snakePosition.find(snakeCell => snakeCell === index + 1)) {
-              color = 'black'
-            }
-            if(snake && fruitPosition === index + 1) {
-              color = 'red';
-            }
-          return <Cell key={index} color={color} /> })
-        }
+        {FieldColor.map((color, index) => {
+          if (
+            snake &&
+            snakePosition.find((snakeCell) => snakeCell === index + 1)
+          ) {
+            color = 'black';
+          }
+          if (snake && fruitPosition === index + 1) {
+            color = 'red';
+          }
+          return <Cell key={index} color={color} />;
+        })}
       </div>
     </div>
-  )
-}
+  );
+};

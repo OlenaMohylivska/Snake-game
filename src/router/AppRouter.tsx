@@ -17,5 +17,5 @@ export const AppRouter: React.FC = () => {
         </Switch>
       </BrowserRouter>
     </>
-  )
-}
+  );
+};
