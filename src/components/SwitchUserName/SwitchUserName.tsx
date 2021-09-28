@@ -19,14 +19,6 @@ export const SwitchUserName: React.FC = () => {
   const [wayToChooseName, setWayToChooseName] = useState('random');
   const dispatch = useDispatch();
 
-  // "lint-staged": {
-  //   "*.{ts,tsx}": [
-  //     "prettier --write",
-  //     "eslint --fix",
-  //     "git add"
-  //   ]
-  // }
-
   const debounced = useDebouncedCallback((event) => {
     dispatch(setUserName({ name: event.target.value }));
   }, 1000);
