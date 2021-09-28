@@ -1,0 +1,19 @@
+.start-game-wrapper {
+  width: 100%;
+  height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .start-button {
+    width: 20%;
+    height: 20%;
+    font-size: 4rem;
+  }
+
+  .start-button:hover {
+    width: 25%;
+    height: 25%;
+    font-size: 5rem;
+  }
+}

@@ -1,13 +1,15 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { ChangeDirectionActions, 
+import { SetPositionAction,
   ChangeNumberCellsActions, 
   SetDirectionAction, 
   SetFruitPositionAction, 
   setTimerInfoAction,
   resetStateAction,
   resetGameProgressAction,
-  setUserNameAction
+  setUserNameAction,
+  MovingDirectionActions
  } from './types';
+ 
 export interface IState {
   position: number[],
   counter: number,
@@ -15,10 +17,13 @@ export interface IState {
     columns: number,
     rows: number
   },
-  direction: string,
+  direction: MovingDirectionActions,
   fruitPosition: number,
   timerInfo: string,
-  userName: string,
+  userName: {
+    name: string,
+    error: string,
+  },
 }
 
 export const initialState: IState = {
@@ -28,66 +33,24 @@ export const initialState: IState = {
     columns: 15,
     rows: 15
   },
-  direction: 'RIGHT',
+  direction: MovingDirectionActions.RIGHT,
   fruitPosition: 0,
   timerInfo: '',
-  userName: '',
+  userName: {
+    name: '',
+    error: '',
+  },
 }
 
 export const rootReducer = createReducer(initialState, {
-  [ChangeDirectionActions.CHANGE_DIRECTION_TOP]: (state) => {
-    const positionCopy = [...state.position];
-    positionCopy.push(positionCopy[positionCopy.length - 1] - state.size.columns);
-    
-    if(!positionCopy.find(el => el === state.fruitPosition)) {
-      positionCopy.shift();
-    }
+  [SetPositionAction]: (state, action) => {
 
     return {
       ...state,
-      position: positionCopy
+      position: action.payload
     };
   },
-  [ChangeDirectionActions.CHANGE_DIRECTION_BOTTOM]: (state) => {
-    const positionCopy = [...state.position];
-    positionCopy.push(positionCopy[positionCopy.length - 1] + state.size.columns);
 
-    if(!positionCopy.find(el => el === state.fruitPosition)) {
-      positionCopy.shift();
-    }
-
-    return {
-      ...state,
-      position: positionCopy
-    };
-  },
-  [ChangeDirectionActions.CHANGE_DIRECTION_LEFT]: (state) => {
-    const positionCopy = [...state.position];
-    positionCopy.push(positionCopy[positionCopy.length - 1] - 1);
-    
-    if(!positionCopy.find(el => el === state.fruitPosition)) {
-      positionCopy.shift();
-    }
-
-    return {
-      ...state,
-      position: positionCopy
-    };
-  },
-  [ChangeDirectionActions.CHANGE_DIRECTION_RIGHT]: (state) => {
-    const positionCopy = [...state.position];
-    positionCopy.push(positionCopy[positionCopy.length - 1] + 1);
-   
-    if(!positionCopy.find(el => el === state.fruitPosition)) {
-      positionCopy.shift();
-    }
-
-    return {
-      ...state,
-      position: positionCopy,
-      isMoving: true
-    };
-  },
   [ChangeNumberCellsActions.CHANGE_NUMBER_COLUMNS]: (state, action) => {
     
     return {
@@ -115,7 +78,7 @@ export const rootReducer = createReducer(initialState, {
       || (state.direction === 'TOP' && action.payload === 'BOTTOM')
       || (state.direction === 'BOTTOM' && action.payload === 'TOP')) {
 
-      return;
+      return state;
     }
 
     return {
@@ -156,9 +119,10 @@ export const rootReducer = createReducer(initialState, {
     
     return {
       ...state,
-      userName: action.payload,
+      userName: {
+        name: action.payload.name,
+        error: action.payload.error
+      },
     }
   },
 })
-
-

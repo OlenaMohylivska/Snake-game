@@ -1,22 +1,19 @@
-import React from 'react';
-import { GameFieldSize } from '../../components/GameFieldSize';
-import { Board } from './../../components/Board/Board';
+import React, { useEffect } from 'react';
+import { fetchUser } from '../../store/asyncActions';
 import { useDispatch } from 'react-redux';
-import { setUserName } from './../../store/actions';
+import { HomeStepper } from '../../components/HomeStepper';
+
 
 export const Home: React.FC = () => {
   const dispatch = useDispatch();
-  localStorage.setItem('bestScore', '0');
 
-  fetch('https://randomuser.me/api/')
-    .then(response => response.json())
-    .then(data =>
-      dispatch(setUserName(`${data.results[0].name.first} ${data.results[0].name.last}`)));
+  useEffect(() => {
+    dispatch(fetchUser());
+  }, [dispatch])
 
   return (
     <>
-      <GameFieldSize />
-      <Board snake={false} />
+    <HomeStepper />
     </>
   )
 }
