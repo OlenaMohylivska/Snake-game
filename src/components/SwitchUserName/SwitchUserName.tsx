@@ -8,10 +8,9 @@ import {
   InputLabel,
   Select,
   MenuItem,
-
 } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
-import { useDebouncedCallback } from "use-debounce";
+import { useDebouncedCallback } from 'use-debounce';
 import { setUserName } from '../../store/actions';
 import { getAllNamesFromLS, } from '../../utils';
 import './SwitchUserName.scss';
@@ -20,7 +19,6 @@ export const SwitchUserName: React.FC = () => {
   const [wayToChooseName, setWayToChooseName] = useState("random");
   const dispatch = useDispatch();
 
-
   // "lint-staged": {
   //   "*.{ts,tsx}": [
   //     "prettier --write",
@@ -28,8 +26,6 @@ export const SwitchUserName: React.FC = () => {
   //     "git add"
   //   ]
   // }
-
-
 
   const debounced = useDebouncedCallback((event) => {
     dispatch(setUserName({ name: event.target.value }));
