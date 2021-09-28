@@ -16,18 +16,8 @@ import { setUserName } from '../../store/actions';
 import { getAllNamesFromLS } from '../../utils';
 import './SwitchUserName.scss';
 
-
-// "lint-staged": {
-//   "src/**/*.{ts,tsx}": [
-//     "prettier --write",
-//     "eslint --fix",
-//     "git add"
-//   ]
-// }
-
-
 export const SwitchUserName: React.FC = () => {
-  const [wayToChooseName, setWayToChooseName] = useState("random");
+  const [wayToChooseName, setWayToChooseName] = useState("rando");
   const dispatch = useDispatch();
 
   const debounced = useDebouncedCallback((event) => {
