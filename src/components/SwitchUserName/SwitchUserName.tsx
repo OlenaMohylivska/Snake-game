@@ -7,7 +7,7 @@ import {
   TextField,
   InputLabel,
   Select,
-  MenuItem
+  MenuItem,
 } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import { useDebouncedCallback } from 'use-debounce';
