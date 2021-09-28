@@ -7,7 +7,7 @@ import {
   TextField,
   InputLabel,
   Select,
-  MenuItem,
+  MenuItem
 } from "@material-ui/core";
 import { useDispatch } from "react-redux";
 import { useDebouncedCallback } from "use-debounce";
@@ -19,7 +19,7 @@ export const SwitchUserName: React.FC = () => {
   const [wayToChooseName, setWayToChooseName] = useState("random");
   const dispatch = useDispatch();
 
-  const debounced = useDebouncedCallback((event) => {    
+  const debounced = useDebouncedCallback((event) => {
     dispatch(setUserName({ name: event.target.value }));
   }, 1000);
 
