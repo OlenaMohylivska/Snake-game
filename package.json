@@ -77,7 +77,6 @@
     "*.{ts,tsx}": [
       "eslint",
       "prettier --write"
-      
     ]
   }
 }
