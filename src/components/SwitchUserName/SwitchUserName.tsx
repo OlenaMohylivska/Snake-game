@@ -17,7 +17,7 @@ import { getAllNamesFromLS } from '../../utils';
 import './SwitchUserName.scss';
 
 export const SwitchUserName: React.FC = () => {
-  const [wayToChooseName, setWayToChooseName] = useState("rando");
+  const [wayToChooseName, setWayToChooseName] = useState("random");
   const dispatch = useDispatch();
 
   const debounced = useDebouncedCallback((event) => {
