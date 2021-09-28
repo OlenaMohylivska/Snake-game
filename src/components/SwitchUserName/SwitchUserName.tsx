@@ -18,6 +18,7 @@ import './SwitchUserName.scss';
 export const SwitchUserName: React.FC = () => {
   const [wayToChooseName, setWayToChooseName] = useState('random');
   const dispatch = useDispatch();
+  console.log('jj');
 
   const debounced = useDebouncedCallback((event) => {
     dispatch(setUserName({ name: event.target.value }));
