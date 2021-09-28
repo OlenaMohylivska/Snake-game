@@ -14,7 +14,7 @@ export const StartGame: React.FC = () => {
     if (!localStorage.getItem(userName)) {
       localStorage.setItem(userName, '0');
     }
-    history.push(ROUTES.PLAY)
+    history.push(ROUTES.PLAY);
   }, [userName, history]);
 
   return (
@@ -24,9 +24,10 @@ export const StartGame: React.FC = () => {
         variant='contained'
         color='primary'
         size='large'
-        onClick={toStartGame}>
+        onClick={toStartGame}
+      >
         Start
       </Button>
     </div>
   );
-}
+};

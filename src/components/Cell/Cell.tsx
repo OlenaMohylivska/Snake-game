@@ -3,10 +3,8 @@ import clsx from 'clsx';
 import './Cell.scss';
 
 interface IProps {
-  color: string
+  color: string;
 }
 export const Cell: React.FC<IProps> = ({ color }) => {
-  return (
-    <div className={clsx('cell', color )}></div>
-  )
-}
+  return <div className={clsx('cell', color)}></div>;
+};

@@ -5,7 +5,7 @@ import { Cell } from './../Cell';
 import './Board.scss';
 
 interface IProps {
-  snake: boolean
+  snake: boolean;
 }
 
 export const Board: React.FC<IProps> = ({ snake }) => {
@@ -41,20 +41,21 @@ export const Board: React.FC<IProps> = ({ snake }) => {
         className='board'
         style={{
           gridTemplateColumns: `repeat(${fieldSize.columns}, 40px)`,
-          gridTemplateRows: `repeat(${fieldSize.rows}, 40px)`
+          gridTemplateRows: `repeat(${fieldSize.rows}, 40px)`,
         }}
       >
-        {
-          FieldColor.map((color, index) => {
-            if (snake && snakePosition.find(snakeCell => snakeCell === index + 1)) {
-              color = 'black';
-            }
-            if (snake && fruitPosition === index + 1) {
-              color = 'red';
-            }
-            return <Cell key={index} color={color} />;
-          })
-        }
+        {FieldColor.map((color, index) => {
+          if (
+            snake &&
+            snakePosition.find((snakeCell) => snakeCell === index + 1)
+          ) {
+            color = 'black';
+          }
+          if (snake && fruitPosition === index + 1) {
+            color = 'red';
+          }
+          return <Cell key={index} color={color} />;
+        })}
       </div>
     </div>
   );

@@ -3,7 +3,5 @@ import { AppRouter } from './router/AppRouter';
 import './App.scss';
 
 export const App: React.FC = () => {
-  return (
-    <AppRouter />
-  );
-}
+  return <AppRouter />;
+};

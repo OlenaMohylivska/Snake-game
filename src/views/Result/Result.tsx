@@ -44,8 +44,8 @@ export const Result: React.FC = () => {
           color='primary'
           size='large'
           onClick={() => {
-            dispatch(resetState())
-            history.push(ROUTES.HOME)
+            dispatch(resetState());
+            history.push(ROUTES.HOME);
           }}
         >
           To main menu
@@ -56,13 +56,13 @@ export const Result: React.FC = () => {
           color='primary'
           size='large'
           onClick={() => {
-            dispatch(resetGameProgress())
-            history.push(ROUTES.PLAY)
+            dispatch(resetGameProgress());
+            history.push(ROUTES.PLAY);
           }}
         >
           Try again
         </Button>
       </div>
     </div>
-  )
-}
+  );
+};

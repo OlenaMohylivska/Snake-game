@@ -1,9 +1,9 @@
-import React, { useState, useCallback } from "react";
-import { TextField } from "@material-ui/core";
-import { useDispatch, useSelector } from "react-redux";
-import { IState } from "./../../store/rootReducer";
-import { changeNumberOfColumns, changeNumberOfRows } from "../../store/actions";
-import "./GameFieldSize.scss";
+import React, { useState, useCallback } from 'react';
+import { TextField } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
+import { IState } from './../../store/rootReducer';
+import { changeNumberOfColumns, changeNumberOfRows } from '../../store/actions';
+import './GameFieldSize.scss';
 
 export const GameFieldSize: React.FC = () => {
   const [isSizeError, setIsSizeError] = useState(false);
@@ -42,31 +42,31 @@ export const GameFieldSize: React.FC = () => {
   );
 
   return (
-    <form className="game-field-form" autoComplete="off">
+    <form className='game-field-form' autoComplete='off'>
       <TextField
-        type="number"
-        id="columns-input"
+        type='number'
+        id='columns-input'
         defaultValue={fieldSize.columns}
-        label="Columns"
-        margin="normal"
-        variant="outlined"
+        label='Columns'
+        margin='normal'
+        variant='outlined'
         onChange={handleChangeColumns}
-        size="small"
+        size='small'
         error={isSizeError}
-        helperText={isSizeError && "From 10 to 25"}
+        helperText={isSizeError && 'From 10 to 25'}
       />
       <TextField
-        className="text-field-row"
-        type="number"
-        id="rows-input"
+        className='text-field-row'
+        type='number'
+        id='rows-input'
         defaultValue={fieldSize.rows}
-        label="Rows"
-        margin="normal"
-        variant="outlined"
+        label='Rows'
+        margin='normal'
+        variant='outlined'
         onChange={handleChangeRows}
-        size="small"
+        size='small'
         error={isSizeError}
-        helperText={isSizeError && "From 10 to 15"}
+        helperText={isSizeError && 'From 10 to 15'}
       />
     </form>
   );
