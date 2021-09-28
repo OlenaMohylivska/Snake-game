@@ -74,10 +74,6 @@
     "prettier": "2.4.1"
   },
   "lint-staged": {
-    "src/**/*.{ts,tsx}": [
-      "prettier --write",
-      "eslint --fix",
-      "git add"
-    ]
+    "src/**/*.{ts,tsx}": ["./node_modules/.bin/eslint — fix", "git add"]
   }
 }
