@@ -25,6 +25,7 @@ import './SwitchUserName.scss';
 //   ]
 // }
 
+
 export const SwitchUserName: React.FC = () => {
   const [wayToChooseName, setWayToChooseName] = useState("random");
   const dispatch = useDispatch();
