@@ -1,20 +1,35 @@
 import React, { useState, useCallback } from 'react';
 import { TextField } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
-import { IState } from './../../store/rootReducer';
 import { changeNumberOfColumns, changeNumberOfRows } from '../../store/actions';
+import { AnyAction } from 'redux';
+import { useTabletQuery, useMobileQuery } from '../../utils';
 import './GameFieldSize.scss';
 
-export const GameFieldSize: React.FC = () => {
+type Props = {
+  dispatch: (action: AnyAction) => void;
+  fieldSize: {
+    rows: number;
+    columns: number;
+  };
+};
+
+export const GameFieldSize: React.FC<Props> = ({ dispatch, fieldSize }) => {
   const [isSizeError, setIsSizeError] = useState(false);
-  const dispatch = useDispatch();
-  const fieldSize = useSelector((state: IState) => state.size);
+  const { innerWidth: width, innerHeight: height } = window;
+  const maxBoardHeight = height - 120;
+  const isTabletScreen = useTabletQuery();
+  const isMobileScreen = useMobileQuery();
 
   const handleChangeColumns = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const value = Number(event.target.value);
+      const sellWidth = width / value;
+      const conditionSizeForChecking =
+        isTabletScreen || isMobileScreen
+          ? maxBoardHeight < sellWidth * fieldSize.rows
+          : value > 25 || value < 10;
 
-      if (value > 25 || value < 10) {
+      if (conditionSizeForChecking) {
         setIsSizeError(true);
 
         return;
@@ -22,23 +37,27 @@ export const GameFieldSize: React.FC = () => {
       setIsSizeError(false);
       dispatch(changeNumberOfColumns(value));
     },
-    [dispatch]
+    [dispatch, fieldSize]
   );
 
   const handleChangeRows = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const value = Number(event.target.value);
+      const sellWidth = width / fieldSize.columns;
+      const conditionSizeForChecking =
+        isTabletScreen || isMobileScreen
+          ? maxBoardHeight / value < sellWidth || value < 2
+          : value > 15 || value < 10;
 
-      if (value > 15 || value < 10) {
+      if (conditionSizeForChecking) {
         setIsSizeError(true);
 
         return;
       }
       setIsSizeError(false);
-
       dispatch(changeNumberOfRows(value));
     },
-    [dispatch]
+    [dispatch, fieldSize]
   );
 
   return (
@@ -53,7 +72,7 @@ export const GameFieldSize: React.FC = () => {
         onChange={handleChangeColumns}
         size='small'
         error={isSizeError}
-        helperText={isSizeError && 'From 10 to 25'}
+        helperText={isSizeError && 'Wrong size'}
       />
       <TextField
         className='text-field-row'
@@ -66,7 +85,7 @@ export const GameFieldSize: React.FC = () => {
         onChange={handleChangeRows}
         size='small'
         error={isSizeError}
-        helperText={isSizeError && 'From 10 to 15'}
+        helperText={isSizeError && 'Wrong size'}
       />
     </form>
   );

@@ -1,18 +1,19 @@
 import React, { useCallback } from 'react';
 import { Button } from '@material-ui/core';
-import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { IState } from './../../store/rootReducer';
 import { ROUTES } from '../../routes';
 import './StartGame.scss';
 
-export const StartGame: React.FC = () => {
-  const userName = useSelector((state: IState) => state.userName.name);
+type Props = {
+  userName: { name: string; error: string };
+};
+
+export const StartGame: React.FC<Props> = ({ userName }) => {
   const history = useHistory();
 
   const toStartGame = useCallback(() => {
-    if (!localStorage.getItem(userName)) {
-      localStorage.setItem(userName, '0');
+    if (!localStorage.getItem(userName.name)) {
+      localStorage.setItem(userName.name, '0');
     }
     history.push(ROUTES.PLAY);
   }, [userName, history]);

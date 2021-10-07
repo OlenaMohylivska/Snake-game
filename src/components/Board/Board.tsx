@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { IState } from './../../store/rootReducer';
 import { Cell } from './../Cell';
+import { useMobileQuery, useTabletQuery } from '../../utils';
 import './Board.scss';
 
 interface IProps {
@@ -12,6 +13,8 @@ export const Board: React.FC<IProps> = ({ snake }) => {
   const snakePosition = useSelector((state: IState) => state.position);
   const fruitPosition = useSelector((state: IState) => state.fruitPosition);
   const fieldSize = useSelector((state: IState) => state.size);
+  const isMobileScreen = useMobileQuery();
+  const isTabletScreen = useTabletQuery();
 
   const FieldColor = useMemo(() => {
     const result = [];
@@ -39,10 +42,18 @@ export const Board: React.FC<IProps> = ({ snake }) => {
     <div className='board-wrapper'>
       <div
         className='board'
-        style={{
-          gridTemplateColumns: `repeat(${fieldSize.columns}, 40px)`,
-          gridTemplateRows: `repeat(${fieldSize.rows}, 40px)`,
-        }}
+        style={
+          isMobileScreen || isTabletScreen
+            ? {
+                width: '100%',
+                gridTemplateColumns: `repeat(${fieldSize.columns}, 1fr`,
+                gridTemplateRows: `repeat(${fieldSize.rows}, 1fr`,
+              }
+            : {
+                gridTemplateColumns: `repeat(${fieldSize.columns}, 40px)`,
+                gridTemplateRows: `repeat(${fieldSize.rows}, 40px)`,
+              }
+        }
       >
         {FieldColor.map((color, index) => {
           if (

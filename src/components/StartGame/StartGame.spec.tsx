@@ -1,26 +1,25 @@
 import React from 'react';
-import configureStore from 'redux-mock-store';
 import { StartGame } from './StartGame';
-import { mount, shallow } from 'enzyme';
-import { describe, it, expect } from '@jest/globals';
-import { Provider } from 'react-redux';
+import { mount } from 'enzyme';
+import { describe, it, expect, jest } from '@jest/globals';
+import { MemoryRouter } from 'react-router';
 
-const mockStore = configureStore();
-const store = mockStore({
-  userName: { name: 'Ivan', error: '' },
-});
-describe('Test cell component', () => {
-  it('should make click', () => {
-    const startGameComponent = mount(
-      <Provider store={store}>
-        <StartGame />
-      </Provider>
+const mockHistoryPush = jest.fn();
+jest.mock('react-router-dom', () => ({
+  useHistory: () => ({
+    push: mockHistoryPush,
+  }),
+}));
+
+describe('Test StartGame component', () => {
+  it('should make click and set path to "/play', () => {
+    const wrapper = mount(
+      <MemoryRouter initialEntries={['/']}>
+        <StartGame userName={{ name: 'Ivan', error: '' }} />
+      </MemoryRouter>
     );
-    const startGameBtn = startGameComponent.find('.start-button');
-    expect(startGameBtn.length).toBe(1);
-    // startGameBtn.simulate('click');
-    // const board = startGameComponent.find('.board');
-
-    // expect(board.length).toBe(1);
+    const startGameBtn = wrapper.find('.start-button').hostNodes();
+    startGameBtn.simulate('click');
+    expect(mockHistoryPush).toHaveBeenCalledWith('/play');
   });
 });

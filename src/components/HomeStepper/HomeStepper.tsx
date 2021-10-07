@@ -1,23 +1,44 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Box, MobileStepper, Button } from '@material-ui/core';
 import { SwitchUserName } from './../SwitchUserName/SwitchUserName';
 import { GameFieldSize } from './../GameFieldSize/GameFieldSize';
 import { Board } from './../Board/Board';
 import { StartGame } from './../StartGame/StartGame';
+import { useSelector, useDispatch } from 'react-redux';
+import { IState } from '../../store/rootReducer';
+import { changeNumberOfRows } from '../../store/actions';
+import { useHorizontalMobileQuery } from '../../utils';
 import './HomeStepper.scss';
 
-const steps = [
-  { component: <SwitchUserName /> },
-  {
-    component: [
-      <GameFieldSize key='GameFieldSize' />,
-      <Board key='Board' snake={false} />,
-    ],
-  },
-  { component: <StartGame /> },
-];
-
 export const HomeStepper: React.FC = () => {
+  const userName = useSelector((state: IState) => state.userName.name);
+  const isMobileScreen = useHorizontalMobileQuery();
+  const dispatch = useDispatch();
+  const fieldSize = useSelector((state: IState) => state.size);
+
+  useEffect(() => {
+    if (isMobileScreen) {
+      dispatch(changeNumberOfRows(6));
+    }
+  }, [isMobileScreen]);
+
+  const steps = [
+    { component: <SwitchUserName /> },
+    {
+      component: [
+        <GameFieldSize
+          dispatch={dispatch}
+          fieldSize={{ rows: fieldSize.rows, columns: fieldSize.columns }}
+          key='GameFieldSize'
+        />,
+        <Board key='Board' snake={false} />,
+      ],
+    },
+    {
+      component: <StartGame userName={{ name: userName, error: '' }} />,
+    },
+  ];
+
   const [activeStep, setActiveStep] = useState(0);
   const maxSteps = steps.length;
 
