@@ -2,7 +2,13 @@ import React, { useState, useCallback } from 'react';
 import { TextField } from '@material-ui/core';
 import { changeNumberOfColumns, changeNumberOfRows } from '../../store/actions';
 import { AnyAction } from 'redux';
-import { useTabletQuery, useMobileQuery } from '../../utils';
+import {
+  useTabletQuery,
+  useMobileQuery,
+  screenWidth,
+  screenHeight,
+  maxBoardHeight,
+} from '../../utils';
 import './GameFieldSize.scss';
 
 type Props = {
@@ -15,15 +21,13 @@ type Props = {
 
 export const GameFieldSize: React.FC<Props> = ({ dispatch, fieldSize }) => {
   const [isSizeError, setIsSizeError] = useState(false);
-  const { innerWidth: width, innerHeight: height } = window;
-  const maxBoardHeight = height - 120;
   const isTabletScreen = useTabletQuery();
   const isMobileScreen = useMobileQuery();
 
   const handleChangeColumns = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const value = Number(event.target.value);
-      const sellWidth = width / value;
+      const sellWidth = screenWidth / value;
       const conditionSizeForChecking =
         isTabletScreen || isMobileScreen
           ? maxBoardHeight < sellWidth * fieldSize.rows
@@ -43,7 +47,7 @@ export const GameFieldSize: React.FC<Props> = ({ dispatch, fieldSize }) => {
   const handleChangeRows = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const value = Number(event.target.value);
-      const sellWidth = width / fieldSize.columns;
+      const sellWidth = screenWidth / fieldSize.columns;
       const conditionSizeForChecking =
         isTabletScreen || isMobileScreen
           ? maxBoardHeight / value < sellWidth || value < 2

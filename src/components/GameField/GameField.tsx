@@ -109,7 +109,7 @@ export const GameField: React.FC = () => {
         positionCopy.shift();
       }
 
-      dispatch(setSnakePosition(positionCopy));
+      // dispatch(setSnakePosition(positionCopy));
     }
   }, 300);
 

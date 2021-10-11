@@ -12,9 +12,14 @@ export const getAllNamesFromLS = (): string[] => {
   return allNames;
 };
 
+export const { innerWidth: screenWidth, innerHeight: screenHeight } = window;
+export const maxBoardHeight = screenHeight - 140;
+
 export const useMobileQuery = () =>
-  useMediaQuery('(max-width: 600px)', { noSsr: true });
-export const useHorizontalMobileQuery = () =>
-  useMediaQuery('(max-height:600px)', { noSsr: true });
+  useMediaQuery('(max-width: 720px)', { noSsr: true });
+
 export const useTabletQuery = () =>
-  useMediaQuery('(max-width: 768px)', { noSsr: true });
+  useMediaQuery('(max-width: 1152px)', { noSsr: true });
+
+export const useDesktopQuery = () =>
+  useMediaQuery('(min-width: 1200px)', { noSsr: true });

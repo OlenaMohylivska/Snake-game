@@ -1,0 +1,12 @@
+.game-buttons-wrapper {
+  width: 200px;
+  margin: 5px auto 0;
+  text-align: center;
+  vertical-align: bottom;
+
+  .middle-buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+

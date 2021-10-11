@@ -1,5 +1,5 @@
 import React from 'react';
-import { hasDuplicates } from './index';
+import { hasDuplicates } from '../index';
 import { expect, it, describe } from '@jest/globals';
 
 describe('Test hasDuplicates function', () => {

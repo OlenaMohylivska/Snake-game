@@ -1,22 +1,31 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { IState } from './../../store/rootReducer';
+import React, { useEffect } from 'react';
 import { Button } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { resetState, resetGameProgress } from './../../store/actions';
 import { ROUTES } from './../../routes';
+import { AnyAction } from 'redux';
 import './Result.scss';
 
-export const Result: React.FC = () => {
-  const snakePosition = useSelector((state: IState) => state.position);
-  const timerInfo = useSelector((state: IState) => state.timerInfo);
-  const userName = useSelector((state: IState) => state.userName.name);
-  const history = useHistory();
-  const dispatch = useDispatch();
+type Props = {
+  dispatch: (action: AnyAction) => void;
+  userName: string;
+  timerInfo: string;
+  snakePosition: number[];
+};
 
-  if (Number(localStorage.getItem(userName)) < snakePosition.length - 1) {
-    localStorage.setItem(userName, `${snakePosition.length - 1}`);
-  }
+export const Result: React.FC<Props> = ({
+  dispatch,
+  userName,
+  timerInfo,
+  snakePosition,
+}) => {
+  const history = useHistory();
+
+  useEffect(() => {
+    if (Number(localStorage.getItem(userName)) < snakePosition.length - 1) {
+      localStorage.setItem(userName, `${snakePosition.length - 1}`);
+    }
+  }, []);
 
   return (
     <div className='result-page'>

@@ -9,16 +9,18 @@ import {
   Select,
   MenuItem,
 } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
 import { useDebouncedCallback } from 'use-debounce';
 import { setUserName } from '../../store/actions';
 import { getAllNamesFromLS } from '../../utils';
+import { AnyAction } from 'redux';
 import './SwitchUserName.scss';
 
-export const SwitchUserName: React.FC = () => {
-  const [wayToChooseName, setWayToChooseName] = useState('random');
-  const dispatch = useDispatch();
+type Props = {
+  dispatch: (action: AnyAction) => void;
+};
 
+export const SwitchUserName: React.FC<Props> = ({ dispatch }) => {
+  const [wayToChooseName, setWayToChooseName] = useState('random');
   const debounced = useDebouncedCallback((event) => {
     dispatch(setUserName({ name: event.target.value }));
   }, 1000);
@@ -34,7 +36,7 @@ export const SwitchUserName: React.FC = () => {
           row
           className='radio'
           aria-label='userName'
-          defaultValue='random'
+          defaultValue={wayToChooseName}
           name='radio-buttons-group'
           onChange={(event) => setWayToChooseName(event.target.value)}
         >

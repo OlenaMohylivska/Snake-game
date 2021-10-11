@@ -6,24 +6,44 @@ import { Board } from './../Board/Board';
 import { StartGame } from './../StartGame/StartGame';
 import { useSelector, useDispatch } from 'react-redux';
 import { IState } from '../../store/rootReducer';
-import { changeNumberOfRows } from '../../store/actions';
-import { useHorizontalMobileQuery } from '../../utils';
+import { changeNumberOfColumns, changeNumberOfRows } from '../../store/actions';
+import {
+  useMobileQuery,
+  useTabletQuery,
+  screenWidth,
+  maxBoardHeight,
+} from '../../utils';
 import './HomeStepper.scss';
+
+const defaultTabletCells = 25;
 
 export const HomeStepper: React.FC = () => {
   const userName = useSelector((state: IState) => state.userName.name);
-  const isMobileScreen = useHorizontalMobileQuery();
+  const isMobileScreen = useMobileQuery();
+  const isTabletScreen = useTabletQuery();
   const dispatch = useDispatch();
   const fieldSize = useSelector((state: IState) => state.size);
 
+  const calculateNumberOfRows = useCallback(
+    (columns: number): number => {
+      const sellWidth = screenWidth / columns;
+
+      return Math.floor(maxBoardHeight / sellWidth);
+    },
+    [isMobileScreen, isTabletScreen]
+  );
+
   useEffect(() => {
     if (isMobileScreen) {
-      dispatch(changeNumberOfRows(6));
+      dispatch(changeNumberOfRows(calculateNumberOfRows(fieldSize.columns)));
+    } else if (isTabletScreen) {
+      dispatch(changeNumberOfColumns(defaultTabletCells));
+      dispatch(changeNumberOfRows(calculateNumberOfRows(defaultTabletCells)));
     }
-  }, [isMobileScreen]);
+  }, [isMobileScreen, useTabletQuery]);
 
   const steps = [
-    { component: <SwitchUserName /> },
+    { component: <SwitchUserName dispatch={dispatch} /> },
     {
       component: [
         <GameFieldSize
