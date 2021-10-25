@@ -1,23 +1,73 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Box, MobileStepper, Button } from '@material-ui/core';
 import { SwitchUserName } from './../SwitchUserName/SwitchUserName';
 import { GameFieldSize } from './../GameFieldSize/GameFieldSize';
 import { Board } from './../Board/Board';
 import { StartGame } from './../StartGame/StartGame';
+import { useSelector, useDispatch } from 'react-redux';
+import { IState } from '../../store/rootReducer';
+import { changeNumberOfColumns, changeNumberOfRows } from '../../store/actions';
+import {
+  useWindowDimensions,
+  useMobileQuery,
+  useTabletQuery,
+  useDesktopQuery,
+} from '../../utils';
 import './HomeStepper.scss';
 
-const steps = [
-  { component: <SwitchUserName /> },
-  {
-    component: [
-      <GameFieldSize key='GameFieldSize' />,
-      <Board key='Board' snake={false} />,
-    ],
-  },
-  { component: <StartGame /> },
-];
+const defaultTabletCells = 25;
 
 export const HomeStepper: React.FC = () => {
+  const userName = useSelector((state: IState) => state.userName.name);
+  const isMobileScreen = useMobileQuery();
+  const isTabletScreen = useTabletQuery();
+  const isDesktopScreen = useDesktopQuery();
+  const dispatch = useDispatch();
+  const fieldSize = useSelector((state: IState) => state.size);
+  const { height, width } = useWindowDimensions();
+  const maxBoardHeight = height! - 140;
+
+  const calculateNumberOfRows = useCallback(
+    (columns: number): number => {
+      if (isDesktopScreen) {
+        return fieldSize.rows;
+      }
+      const sellWidth = width! / columns;
+      return Math.floor(maxBoardHeight / sellWidth);
+    },
+    [isMobileScreen, isTabletScreen, height]
+  );
+
+  useEffect(() => {
+    if (isMobileScreen) {
+      dispatch(changeNumberOfRows(calculateNumberOfRows(fieldSize.columns)));
+    } else if (isTabletScreen) {
+      dispatch(changeNumberOfColumns(defaultTabletCells));
+      dispatch(changeNumberOfRows(calculateNumberOfRows(defaultTabletCells)));
+    }
+  }, [isMobileScreen, isTabletScreen, height]);
+
+  useEffect(() => {
+    dispatch(changeNumberOfRows(calculateNumberOfRows(fieldSize.columns)));
+  }, [height]);
+
+  const steps = [
+    { component: <SwitchUserName dispatch={dispatch} /> },
+    {
+      component: [
+        <GameFieldSize
+          dispatch={dispatch}
+          fieldSize={{ rows: fieldSize.rows, columns: fieldSize.columns }}
+          key='GameFieldSize'
+        />,
+        <Board key='Board' snake={false} />,
+      ],
+    },
+    {
+      component: <StartGame userName={{ name: userName, error: '' }} />,
+    },
+  ];
+
   const [activeStep, setActiveStep] = useState(0);
   const maxSteps = steps.length;
 

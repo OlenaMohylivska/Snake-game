@@ -1,13 +1,10 @@
-.box {
-  width: 100%;
+.game-wrapper {
   height: 100vh;
+  padding-bottom: 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+
 }
 
-.stepper {
-  width: 70%;
-  height: 40px; 
-  margin: 0 auto;
-}

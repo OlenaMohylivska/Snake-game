@@ -9,22 +9,24 @@ import {
   Select,
   MenuItem,
 } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
 import { useDebouncedCallback } from 'use-debounce';
 import { setUserName } from '../../store/actions';
 import { getAllNamesFromLS } from '../../utils';
+import { AnyAction } from 'redux';
 import './SwitchUserName.scss';
 
-export const SwitchUserName: React.FC = () => {
-  const [wayToChooseName, setWayToChooseName] = useState('random');
-  const dispatch = useDispatch();
+type Props = {
+  dispatch: (action: AnyAction) => void;
+};
 
+export const SwitchUserName: React.FC<Props> = ({ dispatch }) => {
+  const [wayToChooseName, setWayToChooseName] = useState('random');
   const debounced = useDebouncedCallback((event) => {
     dispatch(setUserName({ name: event.target.value }));
   }, 1000);
 
   const selectUserName = (event: React.ChangeEvent<{ value: unknown }>) => {
-    dispatch(setUserName({ name: event.target.value }));
+    dispatch(setUserName({ name: event.target.value, error: '' }));
   };
 
   return (
@@ -34,7 +36,7 @@ export const SwitchUserName: React.FC = () => {
           row
           className='radio'
           aria-label='userName'
-          defaultValue='random'
+          defaultValue={'random'}
           name='radio-buttons-group'
           onChange={(event) => setWayToChooseName(event.target.value)}
         >
@@ -57,7 +59,7 @@ export const SwitchUserName: React.FC = () => {
 
         {wayToChooseName === 'enter' ? (
           <TextField
-            className='name-field'
+            className='name-field fieldset_name-field_enter'
             label='Enter your name'
             variant='outlined'
             size='medium'
@@ -70,7 +72,7 @@ export const SwitchUserName: React.FC = () => {
             <InputLabel className='select-label'>Select name</InputLabel>
 
             <Select
-              className='name-field'
+              className='name-field fieldset_name-field_select'
               onChange={selectUserName}
               variant='outlined'
             >

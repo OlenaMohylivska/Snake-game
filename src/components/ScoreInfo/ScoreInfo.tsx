@@ -1,32 +1,42 @@
 import React, { useEffect } from 'react';
 import { useStopwatch } from 'react-timer-hook';
-import { useSelector, useDispatch } from 'react-redux';
-import { IState } from './../../store/rootReducer';
-import { setTimerInfo } from './../../store/actions';
+import { useMobileQuery } from '../../utils';
 import './ScoreInfo.scss';
 
-export const ScoreInfo: React.FC = () => {
-  const dispatch = useDispatch();
-  const snakePosition = useSelector((state: IState) => state.position);
-  const userName = useSelector((state: IState) => state.userName);
+type Props = {
+  snakePosition: number[];
+  userName: { name: string; error: string };
+  onUnmount: (minutes: number, seconds: number) => void;
+};
+
+export const ScoreInfo: React.FC<Props> = ({
+  snakePosition,
+  userName,
+  onUnmount,
+}) => {
   const { seconds, minutes } = useStopwatch({ autoStart: true });
+  const isMobileScreen = useMobileQuery();
 
   useEffect(() => {
     return () => {
-      dispatch(setTimerInfo(`${minutes}:${seconds}`));
+      onUnmount(minutes, seconds);
     };
   });
 
   return (
     <div className='score-info-wrapper'>
-      {userName.error ? (
+      {userName.error && !isMobileScreen ? (
         <span className='data-container error'>Error: {userName.error}</span>
       ) : null}
-      <span className='data-container player'>
-        Player name: <span className='data'>{userName.name}</span>
-      </span>
+      {!isMobileScreen ? (
+        <span className='data-container player'>
+          Player name: <span className='data'>{userName.name}</span>
+        </span>
+      ) : null}
+
       <span className='data-container score'>
-        Score: <span className='data'>{snakePosition.length - 1}</span>
+        <span>Score:</span>
+        <span className='data'>{snakePosition.length - 1}</span>
       </span>
       <span className='data-container time'>
         <span>Time:</span>

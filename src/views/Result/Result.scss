@@ -1,3 +1,5 @@
+@import './../../variables.scss';
+
 .result-page {
   height: 80vh;
   display: flex;
@@ -35,6 +37,18 @@
 
     .button {
       width: 170px;
+    }
+  }
+}
+
+@media screen and (max-width: $tablet-width) {
+  .result-page {
+    height: 100vh;
+
+    .result-wrapper {
+      height: 40%;
+      flex-direction: column;
+      align-items: center;
     }
   }
 }
