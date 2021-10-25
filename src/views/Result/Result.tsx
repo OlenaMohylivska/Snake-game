@@ -54,7 +54,7 @@ export const Result: React.FC<Props> = ({
           size='large'
           onClick={() => {
             dispatch(resetState());
-            history.push(ROUTES.HOME);
+            history.replace(ROUTES.HOME);
           }}
         >
           To main menu
@@ -66,7 +66,7 @@ export const Result: React.FC<Props> = ({
           size='large'
           onClick={() => {
             dispatch(resetGameProgress());
-            history.push(ROUTES.PLAY);
+            history.replace(ROUTES.PLAY);
           }}
         >
           Try again

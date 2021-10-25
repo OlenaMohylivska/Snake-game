@@ -26,7 +26,7 @@ export const SwitchUserName: React.FC<Props> = ({ dispatch }) => {
   }, 1000);
 
   const selectUserName = (event: React.ChangeEvent<{ value: unknown }>) => {
-    dispatch(setUserName({ name: event.target.value }));
+    dispatch(setUserName({ name: event.target.value, error: '' }));
   };
 
   return (
@@ -36,7 +36,7 @@ export const SwitchUserName: React.FC<Props> = ({ dispatch }) => {
           row
           className='radio'
           aria-label='userName'
-          defaultValue={wayToChooseName}
+          defaultValue={'random'}
           name='radio-buttons-group'
           onChange={(event) => setWayToChooseName(event.target.value)}
         >
@@ -59,7 +59,7 @@ export const SwitchUserName: React.FC<Props> = ({ dispatch }) => {
 
         {wayToChooseName === 'enter' ? (
           <TextField
-            className='name-field'
+            className='name-field fieldset_name-field_enter'
             label='Enter your name'
             variant='outlined'
             size='medium'
@@ -72,7 +72,7 @@ export const SwitchUserName: React.FC<Props> = ({ dispatch }) => {
             <InputLabel className='select-label'>Select name</InputLabel>
 
             <Select
-              className='name-field'
+              className='name-field fieldset_name-field_select'
               onChange={selectUserName}
               variant='outlined'
             >

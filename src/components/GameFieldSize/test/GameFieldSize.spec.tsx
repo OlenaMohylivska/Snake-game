@@ -35,11 +35,11 @@ describe('Test GameFieldSize component', () => {
 
   it('should be default value to equal passed props: fieldSize.columns', () => {
     const secondChild = wrapper.props().children[0];
-    expect(secondChild.props.defaultValue).toBe(props.fieldSize.columns);
+    expect(secondChild.props.value).toBe(props.fieldSize.columns);
   });
 
   it('should be default value to equal passed props: fieldSize.rows', () => {
     const secondChild = wrapper.props().children[1];
-    expect(secondChild.props.defaultValue).toBe(props.fieldSize.rows);
+    expect(secondChild.props.value).toBe(props.fieldSize.rows);
   });
 });

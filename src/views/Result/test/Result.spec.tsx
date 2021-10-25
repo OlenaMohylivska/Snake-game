@@ -5,24 +5,44 @@ import { describe, it, expect, jest, beforeEach } from '@jest/globals';
 import { MemoryRouter } from 'react-router';
 import { ROUTES } from '../../../routes';
 
-const mockHistoryPush = jest.fn();
+const mockHistoryReplace = jest.fn();
 jest.mock('react-router-dom', () => ({
   useHistory: () => ({
-    push: mockHistoryPush,
+    replace: mockHistoryReplace,
   }),
 }));
+
+const localStorageMock = (function () {
+  let store: { [key: string]: any } = {};
+
+  return {
+    getItem(key: string) {
+      return store[key];
+    },
+
+    setItem(key: string, value: any) {
+      store[key] = value;
+    },
+
+    clear() {
+      store = {};
+    },
+  };
+})();
+
+Object.defineProperty(window, 'localStorage', { value: localStorageMock });
+
+const props: any = {
+  snakePosition: [1, 2, 3],
+  userName: 'John',
+  dispatch: jest.fn(),
+  timerInfo: '0:25',
+};
 
 describe('Test Result component', () => {
   let wrapper: any;
   beforeEach(() => {
-    wrapper = shallow(
-      <Result
-        snakePosition={[1, 2, 3]}
-        userName='Pete'
-        dispatch={jest.fn()}
-        timerInfo='0:25'
-      />
-    );
+    wrapper = shallow(<Result {...props} />);
   });
 
   it('should render component', () => {
@@ -33,43 +53,39 @@ describe('Test Result component', () => {
     const resultContainer = wrapper.find('.result-page');
     expect(resultContainer.length).toBe(1);
   });
-  describe('Test clicks on Result component', () => {
-    const wrapper = mount(
-      <MemoryRouter initialEntries={['/']}>
-        <Result
-          snakePosition={[1, 2, 3]}
-          userName='Pete'
-          dispatch={jest.fn()}
-          timerInfo='0:25'
-        />
-      </MemoryRouter>
-    );
-    it('should make click and change path to "/"', () => {
-      const buttonsWrapper = wrapper.find('.buttons-wrapper');
-      buttonsWrapper.childAt(0).simulate('click');
-      expect(mockHistoryPush).toBeCalledWith(ROUTES.HOME);
-    });
+});
 
-    it('should make click and change path to "/play"', () => {
-      const buttonsWrapper = wrapper.find('.buttons-wrapper');
-      buttonsWrapper.childAt(1).simulate('click');
-      expect(mockHistoryPush).toBeCalledWith(ROUTES.PLAY);
-    });
+describe('Test clicks on Result component', () => {
+  const wrapper = mount(
+    <MemoryRouter initialEntries={['/']}>
+      <Result {...props} />
+    </MemoryRouter>
+  );
+
+  it('should make click and change path to "/"', () => {
+    const buttonsWrapper = wrapper.find('.buttons-wrapper');
+    buttonsWrapper.childAt(0).simulate('click');
+    expect(mockHistoryReplace).toBeCalledWith(ROUTES.HOME);
+  });
+
+  it('should make click and change path to "/play"', () => {
+    const buttonsWrapper = wrapper.find('.buttons-wrapper');
+    buttonsWrapper.childAt(1).simulate('click');
+    expect(mockHistoryReplace).toBeCalledWith(ROUTES.PLAY);
   });
 });
 
 describe('Test localStorage in Result component', () => {
-  // localStorage
-  it('should add new name to localStorage"', () => {
-    const wrapper = mount(
-      <Result
-        snakePosition={[1, 2, 3]}
-        userName='Pete'
-        dispatch={jest.fn()}
-        timerInfo='0:25'
-      />
-    );
+  beforeEach(() => {
+    localStorage.clear();
+  });
 
-    expect(localStorage.key(0)).toEqual('Pete');
+  it('should add new name to localStorage"', () => {
+    localStorage.setItem(props.userName, '0');
+    const wrapper = mount(<Result {...props} />);
+
+    expect(Number(localStorage.getItem(props.userName))).toEqual(
+      props.snakePosition.length - 1
+    );
   });
 });

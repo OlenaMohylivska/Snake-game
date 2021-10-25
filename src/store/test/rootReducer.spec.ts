@@ -1,6 +1,6 @@
 import React from 'react';
 import { initialState, rootReducer } from '../rootReducer';
-import { describe, it, expect, jest } from '@jest/globals';
+import { describe, it, expect } from '@jest/globals';
 import { createAction } from '@reduxjs/toolkit';
 
 describe('Test rootReducer', () => {

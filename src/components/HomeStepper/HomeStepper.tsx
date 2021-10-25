@@ -8,10 +8,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { IState } from '../../store/rootReducer';
 import { changeNumberOfColumns, changeNumberOfRows } from '../../store/actions';
 import {
+  useWindowDimensions,
   useMobileQuery,
   useTabletQuery,
-  screenWidth,
-  maxBoardHeight,
+  useDesktopQuery,
 } from '../../utils';
 import './HomeStepper.scss';
 
@@ -21,16 +21,21 @@ export const HomeStepper: React.FC = () => {
   const userName = useSelector((state: IState) => state.userName.name);
   const isMobileScreen = useMobileQuery();
   const isTabletScreen = useTabletQuery();
+  const isDesktopScreen = useDesktopQuery();
   const dispatch = useDispatch();
   const fieldSize = useSelector((state: IState) => state.size);
+  const { height, width } = useWindowDimensions();
+  const maxBoardHeight = height! - 140;
 
   const calculateNumberOfRows = useCallback(
     (columns: number): number => {
-      const sellWidth = screenWidth / columns;
-
+      if (isDesktopScreen) {
+        return fieldSize.rows;
+      }
+      const sellWidth = width! / columns;
       return Math.floor(maxBoardHeight / sellWidth);
     },
-    [isMobileScreen, isTabletScreen]
+    [isMobileScreen, isTabletScreen, height]
   );
 
   useEffect(() => {
@@ -40,7 +45,11 @@ export const HomeStepper: React.FC = () => {
       dispatch(changeNumberOfColumns(defaultTabletCells));
       dispatch(changeNumberOfRows(calculateNumberOfRows(defaultTabletCells)));
     }
-  }, [isMobileScreen, useTabletQuery]);
+  }, [isMobileScreen, isTabletScreen, height]);
+
+  useEffect(() => {
+    dispatch(changeNumberOfRows(calculateNumberOfRows(fieldSize.columns)));
+  }, [height]);
 
   const steps = [
     { component: <SwitchUserName dispatch={dispatch} /> },

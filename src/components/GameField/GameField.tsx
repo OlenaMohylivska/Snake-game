@@ -2,15 +2,11 @@ import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useInterval } from 'react-interval-hook';
 import { useHistory } from 'react-router-dom';
-import {
-  setDirection,
-  setFruitPosition,
-  setSnakePosition,
-} from '../../store/actions';
+import { setDirection, setFruitPosition } from '../../store/actions';
 import { IState } from './../../store/rootReducer';
 import { Board } from './../Board';
 import { ROUTES } from './../../routes';
-import { hasDuplicates } from '../../utils';
+import { hasDuplicates, useWindowDimensions } from '../../utils';
 import { MovingDirectionActions } from '../../store/types';
 
 interface IArguments {
@@ -94,12 +90,12 @@ export const GameField: React.FC = () => {
 
   const interval = useInterval(() => {
     if (hasDuplicates(snakePosition)) {
-      history.push(ROUTES.RESULT);
+      history.replace(ROUTES.RESULT);
       return;
     }
 
     if (moveValidators[movingDirection]({ snakePosition, fieldSize })) {
-      history.push(ROUTES.RESULT);
+      history.replace(ROUTES.RESULT);
     } else {
       const positionCopy = defineSnakePosition[movingDirection]({
         snakePosition,

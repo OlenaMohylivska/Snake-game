@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { fetchUser } from '../../store/asyncActions';
+import { fetchUser } from '../../store/actions';
 import { useDispatch } from 'react-redux';
 import { HomeStepper } from '../../components/HomeStepper';
 

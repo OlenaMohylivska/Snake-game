@@ -37,12 +37,42 @@
 @media screen and (max-width: $tablet-width) {
   .score-info-wrapper {
     width: 100%;
-    height: 25px;
+    height: 20px;
 
     .score,
     .time {
       width: 25%;
       text-align: center;
+    }
+  }
+}
+
+@media screen and (max-width: $mobile-width) {
+  .score-info-wrapper {
+    width: 100%;
+    height: 20px;
+
+    .score,
+    .time {
+      width: 50%;
+    }
+  }
+}
+
+@media screen and (max-width: 230px) {
+  .score-info-wrapper {
+    width: 100%;
+    height: 20px;
+    flex-direction: column;
+    font-size: 15px;
+
+    .score,
+    .time {
+      width: 100%;
+    }
+
+    .data {
+      font-size: 15px;
     }
   }
 }

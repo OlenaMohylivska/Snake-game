@@ -15,7 +15,7 @@ export const StartGame: React.FC<Props> = ({ userName }) => {
     if (!localStorage.getItem(userName.name)) {
       localStorage.setItem(userName.name, '0');
     }
-    history.push(ROUTES.PLAY);
+    history.replace(ROUTES.PLAY);
   }, [userName, history]);
 
   return (

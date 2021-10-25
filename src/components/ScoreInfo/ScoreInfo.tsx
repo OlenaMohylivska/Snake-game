@@ -35,7 +35,8 @@ export const ScoreInfo: React.FC<Props> = ({
       ) : null}
 
       <span className='data-container score'>
-        Score: <span className='data'>{snakePosition.length - 1}</span>
+        <span>Score:</span>
+        <span className='data'>{snakePosition.length - 1}</span>
       </span>
       <span className='data-container time'>
         <span>Time:</span>

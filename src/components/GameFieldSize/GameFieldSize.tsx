@@ -1,13 +1,12 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { TextField } from '@material-ui/core';
 import { changeNumberOfColumns, changeNumberOfRows } from '../../store/actions';
 import { AnyAction } from 'redux';
 import {
   useTabletQuery,
   useMobileQuery,
-  screenWidth,
-  screenHeight,
-  maxBoardHeight,
+  useWindowDimensions,
+  useDesktopQuery,
 } from '../../utils';
 import './GameFieldSize.scss';
 
@@ -23,14 +22,17 @@ export const GameFieldSize: React.FC<Props> = ({ dispatch, fieldSize }) => {
   const [isSizeError, setIsSizeError] = useState(false);
   const isTabletScreen = useTabletQuery();
   const isMobileScreen = useMobileQuery();
+  const isDesktopScreen = useDesktopQuery();
+  const { height, width } = useWindowDimensions();
+  const maxBoardHeight = height! - 140;
 
   const handleChangeColumns = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const value = Number(event.target.value);
-      const sellWidth = screenWidth / value;
+      const cellWidth = width! / value;
       const conditionSizeForChecking =
         isTabletScreen || isMobileScreen
-          ? maxBoardHeight < sellWidth * fieldSize.rows
+          ? maxBoardHeight < cellWidth * fieldSize.rows
           : value > 25 || value < 10;
 
       if (conditionSizeForChecking) {
@@ -47,10 +49,10 @@ export const GameFieldSize: React.FC<Props> = ({ dispatch, fieldSize }) => {
   const handleChangeRows = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const value = Number(event.target.value);
-      const sellWidth = screenWidth / fieldSize.columns;
+      const cellWidth = width! / fieldSize.columns;
       const conditionSizeForChecking =
         isTabletScreen || isMobileScreen
-          ? maxBoardHeight / value < sellWidth || value < 2
+          ? maxBoardHeight / value < cellWidth || value < 2
           : value > 15 || value < 10;
 
       if (conditionSizeForChecking) {
@@ -64,12 +66,22 @@ export const GameFieldSize: React.FC<Props> = ({ dispatch, fieldSize }) => {
     [dispatch, fieldSize]
   );
 
+  useEffect(() => {
+    if (!isDesktopScreen) {
+      dispatch(
+        changeNumberOfRows(
+          Math.floor(maxBoardHeight / (width! / fieldSize.columns))
+        )
+      );
+    }
+  }, [height, width]);
+
   return (
     <form className='game-field-form' autoComplete='off'>
       <TextField
         type='number'
         id='columns-input'
-        defaultValue={fieldSize.columns}
+        value={fieldSize.columns}
         label='Columns'
         margin='normal'
         variant='outlined'
@@ -82,7 +94,7 @@ export const GameFieldSize: React.FC<Props> = ({ dispatch, fieldSize }) => {
         className='text-field-row'
         type='number'
         id='rows-input'
-        defaultValue={fieldSize.rows}
+        value={fieldSize.rows}
         label='Rows'
         margin='normal'
         variant='outlined'

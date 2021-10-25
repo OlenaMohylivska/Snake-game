@@ -1,5 +1,5 @@
 import React from 'react';
-import { mount, shallow } from 'enzyme';
+import { shallow } from 'enzyme';
 import { describe, it, expect, jest, beforeEach } from '@jest/globals';
 import { SwitchUserName } from '../SwitchUserName';
 
@@ -20,13 +20,13 @@ describe('Test SwitchUserName component', () => {
 
   it('should render TextField with label "Enter your name" on radio change "Enter name"', () => {
     wrapper.find('.radio').simulate('change', { target: { value: 'enter' } });
-    const formWrapper = wrapper.find({ label: 'Enter your name' });
+    const formWrapper = wrapper.find('.fieldset_name-field_enter');
     expect(formWrapper.length).toBe(1);
   });
 
   it('should render InputLabel with className "select-label" on radio change "Select name"', () => {
     wrapper.find('.radio').simulate('change', { target: { value: 'select' } });
-    const formWrapper = wrapper.find('.select-label');
+    const formWrapper = wrapper.find('.fieldset_name-field_select');
     expect(formWrapper.length).toBe(1);
   });
 });
