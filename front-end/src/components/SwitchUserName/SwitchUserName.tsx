@@ -1,33 +1,62 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   FormControl,
   RadioGroup,
   FormControlLabel,
   Radio,
   TextField,
-  InputLabel,
-  Select,
-  MenuItem,
 } from '@material-ui/core';
+import { Alert, Autocomplete } from '@material-ui/lab';
 import { useDebouncedCallback } from 'use-debounce';
-import { setUserName } from '../../store/actions';
-import { getAllNamesFromLS } from '../../utils';
-import { AnyAction } from 'redux';
+import {
+  fetchRandomUser,
+  getUserInfo,
+  saveUserNameToDB,
+  setUserName,
+} from '../../store/actions';
 import './SwitchUserName.scss';
+import { splitFullName } from '../../utils';
 
 type Props = {
-  dispatch: (action: AnyAction) => void;
+  dispatch: (action: any) => void;
+  usersList: string[];
+  error: string | null;
 };
 
-export const SwitchUserName: React.FC<Props> = ({ dispatch }) => {
+export const SwitchUserName: React.FC<Props> = ({ dispatch, usersList, error }) => {
   const [wayToChooseName, setWayToChooseName] = useState('random');
+  const [enteredUserName, setEnteredUserName] = useState({
+    first: '',
+    last: '',
+  });
+  const wayToChooseNameRef = useRef('');
+  const enteredNameRef = useRef({ first: '', last: '' });
+
+  useEffect(() => {
+    wayToChooseNameRef.current = wayToChooseName;
+    enteredNameRef.current = enteredUserName;
+  }, [wayToChooseName, enteredUserName]);
+
   const debounced = useDebouncedCallback((event) => {
-    dispatch(setUserName({ name: event.target.value }));
+    const { firstName, lastName } = splitFullName(event.target.value);
+    dispatch(setUserName({ name: `${firstName} ${lastName}` }));
+    setEnteredUserName({ first: firstName, last: lastName });
   }, 1000);
 
-  const selectUserName = (event: React.ChangeEvent<{ value: unknown }>) => {
-    dispatch(setUserName({ name: event.target.value, error: '' }));
+  const selectUserName = (event: any, value: any) => {
+    const { firstName, lastName } = splitFullName(value);
+    dispatch(getUserInfo({ first: firstName, last: lastName }));
   };
+
+  useEffect(() => {
+    return () => {
+      if (wayToChooseNameRef.current === 'random') {
+        dispatch(fetchRandomUser());
+      } else if (wayToChooseNameRef.current === 'enter') {        
+        dispatch(saveUserNameToDB(enteredNameRef.current));
+      }
+    };
+  }, []);
 
   return (
     <FormControl className='fieldset'>
@@ -60,7 +89,7 @@ export const SwitchUserName: React.FC<Props> = ({ dispatch }) => {
         {wayToChooseName === 'enter' ? (
           <TextField
             className='name-field fieldset_name-field_enter'
-            label='Enter your name'
+            label='Enter first and last name'
             variant='outlined'
             size='medium'
             onChange={debounced}
@@ -68,21 +97,19 @@ export const SwitchUserName: React.FC<Props> = ({ dispatch }) => {
         ) : null}
 
         {wayToChooseName === 'select' ? (
-          <FormControl>
-            <InputLabel className='select-label'>Select name</InputLabel>
-
-            <Select
-              className='name-field fieldset_name-field_select'
-              onChange={selectUserName}
-              variant='outlined'
-            >
-              {getAllNamesFromLS().map((el, index) => (
-                <MenuItem key={index} value={el}>
-                  {el}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <Autocomplete
+            options={usersList}
+            getOptionLabel={(option) => option || ''}
+            onChange={selectUserName}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                className='name-field fieldset_name-field_select'
+                variant='outlined'
+                label='Select user name'
+              />
+            )}
+          />
         ) : null}
       </div>
     </FormControl>

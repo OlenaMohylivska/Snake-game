@@ -12,9 +12,6 @@ export const StartGame: React.FC<Props> = ({ userName }) => {
   const history = useHistory();
 
   const toStartGame = useCallback(() => {
-    if (!localStorage.getItem(userName.name)) {
-      localStorage.setItem(userName.name, '0');
-    }
     history.replace(ROUTES.PLAY);
   }, [userName, history]);
 
