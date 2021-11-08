@@ -1,24 +1,22 @@
 import React, { useEffect } from 'react';
-import { fetchUser } from '../../store/actions';
-import { useDispatch } from 'react-redux';
+import { getAllUsersFromDB } from '../../store/actions';
+import { useDispatch, useSelector } from 'react-redux';
 import { HomeStepper } from '../../components/HomeStepper';
-import axios from 'axios';
+import { IState } from '../../store/rootReducer';
+import { SnackbarError } from './../../components/SnackbarError';
 
 export const Home: React.FC = () => {
   const dispatch = useDispatch();
+  const error = useSelector((state: IState) => state.error);
 
   useEffect(() => {
-    axios('/helloworld')
-      .then((res) => console.log(res.data));
+    dispatch(getAllUsersFromDB());
   }, []);
-
-  useEffect(() => {
-    dispatch(fetchUser());
-  }, [dispatch]);
 
   return (
     <>
       <HomeStepper />
+      {error ? <SnackbarError error={error} message={'Cannot fetch users. '} /> : null}
     </>
   );
 };

@@ -9,6 +9,11 @@ import {
   resetGameProgressAction,
   setUserNameAction,
   MovingDirectionActions,
+  setUsersListAction,
+  setUserBestScoreAction,
+  saveUserInfoRequestAction,
+  saveUserNameSuccessAction,
+  saveUserInfoFailureAction
 } from './types';
 
 export interface IState {
@@ -25,6 +30,10 @@ export interface IState {
     name: string;
     error: string;
   };
+  usersList: string[]; 
+  bestScore: number;
+  isLoading: boolean;
+  error: string | null;
 }
 
 export const initialState: IState = {
@@ -41,6 +50,10 @@ export const initialState: IState = {
     name: '',
     error: '',
   },
+  usersList: [],
+  bestScore: 0,
+  isLoading: false,
+  error: null,
 };
 
 export const rootReducer = createReducer(initialState, {
@@ -100,6 +113,7 @@ export const rootReducer = createReducer(initialState, {
     return {
       ...initialState,
       userName: state.userName,
+      bestScore: state.bestScore,
     };
   },
   [resetGameProgressAction]: (state) => {
@@ -107,15 +121,51 @@ export const rootReducer = createReducer(initialState, {
       ...initialState,
       size: state.size,
       userName: state.userName,
+      bestScore: state.bestScore,
     };
   },
   [setUserNameAction]: (state, action) => {
     return {
       ...state,
+      isLoading: false,
       userName: {
         name: action.payload.name,
         error: action.payload.error,
       },
+    };
+  },
+  [setUsersListAction]: (state, action) => {
+    return {
+      ...state,
+      isLoading: false,
+      usersList: [...action.payload],
+    };
+  },
+  [setUserBestScoreAction]: (state, action) => {
+    return {
+      ...state,
+      isLoading: false,
+      bestScore: action.payload,
+    };
+  },
+  [saveUserInfoRequestAction]: (state) => {
+    return {
+      ...state,
+      isLoading: true,
+    };
+  },
+  [saveUserNameSuccessAction]: (state, action) => {
+    return {
+      ...state,
+      isLoading: false,
+      usersList: [...state.usersList, action.payload],
+    };
+  },
+  [saveUserInfoFailureAction]: (state, action) => {
+    return {
+      ...state,
+      isLoading: false,
+      error: action.payload,
     };
   },
 });

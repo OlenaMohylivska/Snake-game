@@ -1,31 +1,28 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Button } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { resetState, resetGameProgress } from './../../store/actions';
 import { ROUTES } from './../../routes';
 import { AnyAction } from 'redux';
+import { SnackbarError } from '../../components/SnackbarError';
 import './Result.scss';
 
 type Props = {
   dispatch: (action: AnyAction) => void;
-  userName: string;
   timerInfo: string;
   snakePosition: number[];
+  bestScore: number;
+  error: string | null;
 };
 
 export const Result: React.FC<Props> = ({
   dispatch,
-  userName,
   timerInfo,
   snakePosition,
+  bestScore,
+  error,
 }) => {
   const history = useHistory();
-
-  useEffect(() => {
-    if (Number(localStorage.getItem(userName)) < snakePosition.length - 1) {
-      localStorage.setItem(userName, `${snakePosition.length - 1}`);
-    }
-  }, []);
 
   return (
     <div className='result-page'>
@@ -39,7 +36,7 @@ export const Result: React.FC<Props> = ({
         </div>
         <div className='best-score-container'>
           <span className='title'>Best score: </span>
-          <span className='score-data'>{localStorage.getItem(userName)}</span>
+          <span className='score-data'>{bestScore}</span>
         </div>
         <div className='time-container'>
           <span className='title'>You time is: </span>
@@ -72,6 +69,7 @@ export const Result: React.FC<Props> = ({
           Try again
         </Button>
       </div>
+      {error ? <SnackbarError error={error} message={'Cannot update score. '} /> : null}
     </div>
   );
 };

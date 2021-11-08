@@ -1,12 +1,18 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useInterval } from 'react-interval-hook';
 import { useHistory } from 'react-router-dom';
-import { setDirection, setFruitPosition } from '../../store/actions';
+import {
+  setDirection,
+  setFruitPosition,
+  setSnakePosition,
+  setUserBestScore,
+  updateUserScore,
+} from '../../store/actions';
 import { IState } from './../../store/rootReducer';
 import { Board } from './../Board';
 import { ROUTES } from './../../routes';
-import { hasDuplicates, useWindowDimensions } from '../../utils';
+import { hasDuplicates, splitFullName } from '../../utils';
 import { MovingDirectionActions } from '../../store/types';
 
 interface IArguments {
@@ -54,6 +60,8 @@ export const GameField: React.FC = () => {
   const fieldSize = useSelector((state: IState) => state.size);
   const snakePosition = useSelector((state: IState) => state.position);
   const fruitPosition = useSelector((state: IState) => state.fruitPosition);
+  const bestScore = useSelector((state: IState) => state.bestScore);
+  const userName = useSelector((state: IState) => state.userName.name);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -88,13 +96,27 @@ export const GameField: React.FC = () => {
     return randomFruitCell;
   };
 
+  const setScoreToDB = () => {
+    if (snakePosition.length - 1 > bestScore) {
+      dispatch(setUserBestScore(snakePosition.length - 1));
+      const { firstName, lastName } = splitFullName(userName);      
+      dispatch(updateUserScore({
+        first: firstName,
+        last: lastName,
+        score: snakePosition.length - 1,
+      }));
+    };
+  };
+
   const interval = useInterval(() => {
     if (hasDuplicates(snakePosition)) {
+      setScoreToDB();
       history.replace(ROUTES.RESULT);
       return;
     }
 
     if (moveValidators[movingDirection]({ snakePosition, fieldSize })) {
+      setScoreToDB();
       history.replace(ROUTES.RESULT);
     } else {
       const positionCopy = defineSnakePosition[movingDirection]({
@@ -105,7 +127,7 @@ export const GameField: React.FC = () => {
         positionCopy.shift();
       }
 
-      // dispatch(setSnakePosition(positionCopy));
+      dispatch(setSnakePosition(positionCopy));
     }
   }, 300);
 

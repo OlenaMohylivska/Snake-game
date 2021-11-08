@@ -35,14 +35,6 @@ export const hasDuplicates = (array: number[]): boolean => {
   return new Set(array).size !== array.length;
 };
 
-export const getAllNamesFromLS = (): string[] => {
-  const allNames = [];
-  for (let i = 0; i < localStorage.length; i++) {
-    allNames.push(localStorage.key(i) as string);
-  }
-  return allNames;
-};
-
 export const useMobileQuery = () =>
   useMediaQuery('(max-width: 720px)', { noSsr: true });
 
@@ -51,3 +43,8 @@ export const useTabletQuery = () =>
 
 export const useDesktopQuery = () =>
   useMediaQuery('(min-width: 1200px)', { noSsr: true });
+
+export const splitFullName = (passedName: string) => {
+  const name = passedName.split(' ');
+  return { firstName: name[0], lastName: name[1] };
+};

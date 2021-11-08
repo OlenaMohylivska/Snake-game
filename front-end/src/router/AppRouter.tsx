@@ -10,7 +10,8 @@ import { IState } from '../store/rootReducer';
 export const AppRouter: React.FC = () => {
   const snakePosition = useSelector((state: IState) => state.position);
   const timerInfo = useSelector((state: IState) => state.timerInfo);
-  const userName = useSelector((state: IState) => state.userName.name);
+  const bestScore = useSelector((state: IState) => state.bestScore);
+  const error = useSelector((state: IState) => state.error);
   const dispatch = useDispatch();
 
   return (
@@ -25,8 +26,9 @@ export const AppRouter: React.FC = () => {
               <Result
                 dispatch={dispatch}
                 timerInfo={timerInfo}
-                userName={userName}
                 snakePosition={snakePosition}
+                bestScore={bestScore}
+                error={error}
               />
             )}
           />
