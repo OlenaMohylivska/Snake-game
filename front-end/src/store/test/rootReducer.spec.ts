@@ -2,6 +2,7 @@ import React from 'react';
 import { initialState, rootReducer } from '../rootReducer';
 import { describe, it, expect } from '@jest/globals';
 import { createAction } from '@reduxjs/toolkit';
+import { userInfo } from 'os';
 
 describe('Test rootReducer', () => {
   it('should change position to [1, 2]', () => {
@@ -53,18 +54,18 @@ describe('Test rootReducer', () => {
     expect(rootReducer(initialState, action(newValue))).toEqual(expectedResult);
   });
 
-  it('should set userName to "Bob"', () => {
-    const action = createAction<object>('SET_USER_NAME');
-    const newValue = { name: 'Bob', error: '' };
-    const expectedResult = { ...initialState, userName: newValue };
+  it('should set userInfo name to "Bob"', () => {
+    const action = createAction<object>('SET_USER_INFO');
+    const newValue = { name: 'Bob', id: 1 };
+    const expectedResult = { ...initialState, userInfo: newValue };
     expect(rootReducer(initialState, action(newValue))).toEqual(expectedResult);
   });
 
   it('should reset position to [1] and keep Bob', () => {
     const actionReset = createAction('RESET_GAME_PROGRESS');
     const actionSetPosition = createAction<number[]>('SET_POSITION');
-    const actionSetUserName = createAction<object>('SET_USER_NAME');
-    const newUserNameValue = { name: 'Bob', error: '' };
+    const actionSetUserName = createAction<object>('SET_USER_INFO');
+    const newUserNameValue = { name: 'Bob', id: 1 };
     const newPositionValue = [1, 2];
     const expectedPositionResult = {
       ...initialState,
@@ -76,11 +77,11 @@ describe('Test rootReducer', () => {
     );
     expect(newState).toEqual(expectedPositionResult);
 
-    const expectedUserNameResult = { ...newState, userName: newUserNameValue };
+    const expectedUserNameResult = { ...newState, userInfo: newUserNameValue };
     newState = rootReducer(newState, actionSetUserName(newUserNameValue));
     expect(newState).toEqual(expectedUserNameResult);
 
-    const expectedResetResult = { ...initialState, userName: newUserNameValue };
+    const expectedResetResult = { ...initialState, userInfo: newUserNameValue };
     expect(rootReducer(newState, actionReset())).toEqual(expectedResetResult);
   });
 });

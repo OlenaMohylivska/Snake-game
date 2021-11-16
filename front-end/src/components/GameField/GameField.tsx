@@ -12,7 +12,7 @@ import {
 import { IState } from './../../store/rootReducer';
 import { Board } from './../Board';
 import { ROUTES } from './../../routes';
-import { hasDuplicates, splitFullName } from '../../utils';
+import { hasDuplicates } from '../../utils';
 import { MovingDirectionActions } from '../../store/types';
 
 interface IArguments {
@@ -61,7 +61,7 @@ export const GameField: React.FC = () => {
   const snakePosition = useSelector((state: IState) => state.position);
   const fruitPosition = useSelector((state: IState) => state.fruitPosition);
   const bestScore = useSelector((state: IState) => state.bestScore);
-  const userName = useSelector((state: IState) => state.userName.name);
+  const userInfo = useSelector((state: IState) => state.userInfo);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -99,10 +99,8 @@ export const GameField: React.FC = () => {
   const setScoreToDB = () => {
     if (snakePosition.length - 1 > bestScore) {
       dispatch(setUserBestScore(snakePosition.length - 1));
-      const { firstName, lastName } = splitFullName(userName);      
       dispatch(updateUserScore({
-        first: firstName,
-        last: lastName,
+        id: userInfo.id,
         score: snakePosition.length - 1,
       }));
     };

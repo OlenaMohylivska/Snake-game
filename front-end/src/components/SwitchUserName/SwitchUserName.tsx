@@ -6,24 +6,22 @@ import {
   Radio,
   TextField,
 } from '@material-ui/core';
-import { Alert, Autocomplete } from '@material-ui/lab';
+import { Autocomplete } from '@material-ui/lab';
 import { useDebouncedCallback } from 'use-debounce';
 import {
   fetchRandomUser,
   getUserInfo,
-  saveUserNameToDB,
-  setUserName,
+  saveUserInfoToDB,
+  setUserInfo,
 } from '../../store/actions';
 import './SwitchUserName.scss';
-import { splitFullName } from '../../utils';
 
 type Props = {
   dispatch: (action: any) => void;
-  usersList: string[];
-  error: string | null;
+  usersList: Array<{ name: string, id: number}>;
 };
 
-export const SwitchUserName: React.FC<Props> = ({ dispatch, usersList, error }) => {
+export const SwitchUserName: React.FC<Props> = ({ dispatch, usersList }) => {
   const [wayToChooseName, setWayToChooseName] = useState('random');
   const [enteredUserName, setEnteredUserName] = useState({
     first: '',
@@ -38,14 +36,13 @@ export const SwitchUserName: React.FC<Props> = ({ dispatch, usersList, error }) 
   }, [wayToChooseName, enteredUserName]);
 
   const debounced = useDebouncedCallback((event) => {
-    const { firstName, lastName } = splitFullName(event.target.value);
-    dispatch(setUserName({ name: `${firstName} ${lastName}` }));
+    const [ firstName, lastName ] = event.target.value.split(' ');
+    dispatch(setUserInfo({ name: `${firstName} ${lastName}` }));
     setEnteredUserName({ first: firstName, last: lastName });
   }, 1000);
 
   const selectUserName = (event: any, value: any) => {
-    const { firstName, lastName } = splitFullName(value);
-    dispatch(getUserInfo({ first: firstName, last: lastName }));
+    dispatch(getUserInfo({ id: value.id }));
   };
 
   useEffect(() => {
@@ -53,7 +50,7 @@ export const SwitchUserName: React.FC<Props> = ({ dispatch, usersList, error }) 
       if (wayToChooseNameRef.current === 'random') {
         dispatch(fetchRandomUser());
       } else if (wayToChooseNameRef.current === 'enter') {        
-        dispatch(saveUserNameToDB(enteredNameRef.current));
+        dispatch(saveUserInfoToDB(enteredNameRef.current));
       }
     };
   }, []);
@@ -98,8 +95,9 @@ export const SwitchUserName: React.FC<Props> = ({ dispatch, usersList, error }) 
 
         {wayToChooseName === 'select' ? (
           <Autocomplete
+            className='autocomplete'
             options={usersList}
-            getOptionLabel={(option) => option || ''}
+            getOptionLabel={(option) => option.name || ''}
             onChange={selectUserName}
             renderInput={(params) => (
               <TextField

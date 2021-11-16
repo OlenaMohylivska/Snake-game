@@ -7,13 +7,26 @@ import {
   setTimerInfoAction,
   resetStateAction,
   resetGameProgressAction,
-  setUserNameAction,
+  setUserInfoAction,
   MovingDirectionActions,
   setUsersListAction,
   setUserBestScoreAction,
   saveUserInfoRequestAction,
   saveUserNameSuccessAction,
-  saveUserInfoFailureAction
+  saveUserInfoFailureAction,
+  setStatisticRequestAction,
+  setStatisticSuccessAction,
+  setStatisticFailureAction,
+  fetchRandomUserFailureAction,
+  fetchRandomUserRequestAction,
+  getAllUsersFailureAction,
+  getAllUsersRequestAction,
+  getUserInfoRequestAction,
+  getUserInfoFailureAction,
+  updateUserScoreRequestAction,
+  updateUserScoreFailureAction,
+  getStatisticFailureAction,
+  getStatisticRequestAction,
 } from './types';
 
 export interface IState {
@@ -26,14 +39,15 @@ export interface IState {
   direction: MovingDirectionActions;
   fruitPosition: number;
   timerInfo: string;
-  userName: {
+  userInfo: {
     name: string;
-    error: string;
+    id: number;
   };
-  usersList: string[]; 
+  usersList: Array<{ name: string, id: number}>; 
   bestScore: number;
   isLoading: boolean;
   error: string | null;
+  statistic: Array<{ date: string, score: number, time: string}>
 }
 
 export const initialState: IState = {
@@ -46,14 +60,15 @@ export const initialState: IState = {
   direction: MovingDirectionActions.RIGHT,
   fruitPosition: 0,
   timerInfo: '',
-  userName: {
+  userInfo: {
     name: '',
-    error: '',
+    id: 0,
   },
   usersList: [],
   bestScore: 0,
   isLoading: false,
   error: null,
+  statistic: [],
 };
 
 export const rootReducer = createReducer(initialState, {
@@ -112,7 +127,7 @@ export const rootReducer = createReducer(initialState, {
   [resetStateAction]: (state) => {
     return {
       ...initialState,
-      userName: state.userName,
+      userInfo: state.userInfo,
       bestScore: state.bestScore,
     };
   },
@@ -120,17 +135,17 @@ export const rootReducer = createReducer(initialState, {
     return {
       ...initialState,
       size: state.size,
-      userName: state.userName,
+      userInfo: state.userInfo,
       bestScore: state.bestScore,
     };
   },
-  [setUserNameAction]: (state, action) => {
+  [setUserInfoAction]: (state, action) => {
     return {
       ...state,
       isLoading: false,
-      userName: {
+      userInfo: {
         name: action.payload.name,
-        error: action.payload.error,
+        id: action.payload.id,
       },
     };
   },
@@ -141,7 +156,7 @@ export const rootReducer = createReducer(initialState, {
       usersList: [...action.payload],
     };
   },
-  [setUserBestScoreAction]: (state, action) => {
+  [setUserBestScoreAction]: (state, action) => {    
     return {
       ...state,
       isLoading: false,
@@ -154,6 +169,34 @@ export const rootReducer = createReducer(initialState, {
       isLoading: true,
     };
   },
+  [fetchRandomUserRequestAction]: (state) => {
+    return {
+      ...state,
+      isLoading: true,
+    };
+  },
+  [getAllUsersRequestAction]: (state) => {
+    return {
+      ...state,
+      isLoading: true,
+    };
+  },
+  [getUserInfoRequestAction]: (state) => {
+    return {
+      ...state,
+      isLoading: true,
+    };
+  },
+  [updateUserScoreRequestAction]: (state) => {
+    return {
+      ...state,
+      isLoading: true,
+    };
+  },
+
+
+
+  
   [saveUserNameSuccessAction]: (state, action) => {
     return {
       ...state,
@@ -161,7 +204,77 @@ export const rootReducer = createReducer(initialState, {
       usersList: [...state.usersList, action.payload],
     };
   },
+  [fetchRandomUserFailureAction]: (state, action) => {
+    return {
+      ...state,
+      isLoading: false,
+      error: action.payload,
+    };
+  },
+  [getAllUsersFailureAction]: (state, action) => {
+    return {
+      ...state,
+      isLoading: false,
+      error: action.payload,
+    };
+  },
+  [getUserInfoFailureAction]: (state, action) => {
+    return {
+      ...state,
+      isLoading: false,
+      error: action.payload,
+    };
+  },
+  [updateUserScoreFailureAction]: (state, action) => {
+    return {
+      ...state,
+      isLoading: false,
+      error: action.payload,
+    };
+  },
+
+
+
   [saveUserInfoFailureAction]: (state, action) => {
+    return {
+      ...state,
+      isLoading: false,
+      error: action.payload,
+    };
+  },
+  [setStatisticRequestAction]: (state, action) => {       
+    return {
+      ...state,
+      isLoading: true,
+    };
+  },
+  [setStatisticSuccessAction]: (state, action) => {  
+    let passedData = action.payload;
+    
+    if (!Array.isArray(passedData)) {
+      passedData = [passedData];
+    }
+    
+    return {
+      ...state,
+      isLoading: false,
+      statistic: [...passedData],
+    };
+  },
+  [setStatisticFailureAction]: (state, action) => {       
+    return {
+      ...state,
+      isLoading: false,
+      error: action.payload,
+    };
+  },
+  [getStatisticRequestAction]: (state, action) => {       
+    return {
+      ...state,
+      isLoading: true,
+    };
+  },
+  [getStatisticFailureAction]: (state, action) => {       
     return {
       ...state,
       isLoading: false,

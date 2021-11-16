@@ -19,7 +19,7 @@ import { SnackbarError } from '../SnackbarError';
 const defaultTabletCells = 25;
 
 export const HomeStepper: React.FC = () => {
-  const userName = useSelector((state: IState) => state.userName);
+  const userInfo = useSelector((state: IState) => state.userInfo);
   const usersList = useSelector((state: IState) => state.usersList);
   const error = useSelector((state: IState) => state.error);
   const isMobileScreen = useMobileQuery();
@@ -55,7 +55,7 @@ export const HomeStepper: React.FC = () => {
   }, [height]);
 
   const steps = [
-    { component: <SwitchUserName dispatch={dispatch} usersList={usersList} error={error} /> },
+    { component: <SwitchUserName dispatch={dispatch} usersList={usersList} /> },
     {
       component: [
         <GameFieldSize
@@ -64,11 +64,11 @@ export const HomeStepper: React.FC = () => {
           key='GameFieldSize'
         />,
         <Board key='Board' snake={false} />,
-        error ? <SnackbarError error={error} message={'Cannot save user name. '} /> : null
+        error ? <SnackbarError error={error} message={'Cannot save user name. '} key='SnackbarError' /> : null
       ],
     },
     {
-      component: <StartGame userName={userName} />,
+      component: <StartGame userInfo={userInfo} />,
     },
   ];
 

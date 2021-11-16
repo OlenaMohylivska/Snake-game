@@ -1,0 +1,42 @@
+.statistic-wrapper {
+  // height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .table {
+    width: 600px;
+    margin: 20px auto;
+    border: 1px;
+
+    .table-head tr th {
+      width: 200px;
+      text-align: start;
+      position: relative;
+
+      .sort-button {
+        cursor: pointer;
+
+        .arrowUp {
+          position: absolute;
+          bottom: 0;
+        }
+
+        .arrowDown {
+          position: absolute;
+          bottom: 0;
+          left: 48px;
+        }
+      }
+    }
+
+    th, td {
+      border: 1px solid black;
+    }
+  }
+
+  .button {
+    width: 200px;
+    margin: 0 auto;
+  }
+}

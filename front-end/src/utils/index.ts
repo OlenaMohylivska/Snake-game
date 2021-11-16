@@ -43,8 +43,3 @@ export const useTabletQuery = () =>
 
 export const useDesktopQuery = () =>
   useMediaQuery('(min-width: 1200px)', { noSsr: true });
-
-export const splitFullName = (passedName: string) => {
-  const name = passedName.split(' ');
-  return { firstName: name[0], lastName: name[1] };
-};
