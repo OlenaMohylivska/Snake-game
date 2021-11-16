@@ -5,13 +5,15 @@ import './ScoreInfo.scss';
 
 type Props = {
   snakePosition: number[];
-  userName: { name: string; error: string };
+  userInfo: { name: string };
+  error: string | null;
   onUnmount: (minutes: number, seconds: number) => void;
 };
 
 export const ScoreInfo: React.FC<Props> = ({
   snakePosition,
-  userName,
+  userInfo,
+  error,
   onUnmount,
 }) => {
   const { seconds, minutes } = useStopwatch({ autoStart: true });
@@ -25,12 +27,12 @@ export const ScoreInfo: React.FC<Props> = ({
 
   return (
     <div className='score-info-wrapper'>
-      {userName.error && !isMobileScreen ? (
-        <span className='data-container error'>Error: {userName.error}</span>
+      {error && !isMobileScreen ? (
+        <span className='data-container error'>Error: {error}</span>
       ) : null}
       {!isMobileScreen ? (
         <span className='data-container player'>
-          Player name: <span className='data'>{userName.name}</span>
+          Player name: <span className='data'>{userInfo.name}</span>
         </span>
       ) : null}
 

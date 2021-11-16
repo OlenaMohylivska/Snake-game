@@ -6,7 +6,7 @@ import { SwitchUserName } from '../SwitchUserName';
 describe('Test SwitchUserName component', () => {
   let wrapper: any;
   beforeEach(() => {
-    wrapper = shallow(<SwitchUserName dispatch={() => jest.fn()} />);
+    wrapper = shallow(<SwitchUserName dispatch={() => jest.fn()} usersList={[]} />);
   });
 
   it('should render component', () => {
@@ -24,9 +24,9 @@ describe('Test SwitchUserName component', () => {
     expect(formWrapper.length).toBe(1);
   });
 
-  it('should render InputLabel with className "select-label" on radio change "Select name"', () => {
+  it('should render Autocomplete with className "autocomplete" on radio change "Select name"', () => {
     wrapper.find('.radio').simulate('change', { target: { value: 'select' } });
-    const formWrapper = wrapper.find('.fieldset_name-field_select');
+    const formWrapper = wrapper.find('.autocomplete');
     expect(formWrapper.length).toBe(1);
   });
 });

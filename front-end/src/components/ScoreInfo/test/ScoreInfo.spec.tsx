@@ -10,7 +10,8 @@ describe('Test ScoreInfo component', () => {
   beforeEach(() => {
     props = {
       snakePosition: [1, 2, 3],
-      userName: { name: 'Ivan', error: '' },
+      userInfo: { name: 'Ivan' },
+      error: 'Some error',
       onUnmount: jest.fn(),
     };
     wrapper = shallow(<ScoreInfo {...props} />);
@@ -35,5 +36,10 @@ describe('Test ScoreInfo component', () => {
     const scoreContainer = wrapper.find('.score');
     const children = scoreContainer.childAt(1);
     expect(+children.find('.data').text()).toBe(props.snakePosition.length - 1);
+  });
+
+  it('should display error: Some error', () => {
+    const errorContainer = wrapper.find('.error');
+    expect(errorContainer.text()).toBe(`Error: ${props.error}`);
   });
 });

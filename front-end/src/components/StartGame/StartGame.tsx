@@ -5,15 +5,15 @@ import { ROUTES } from '../../routes';
 import './StartGame.scss';
 
 type Props = {
-  userName: { name: string; error: string };
+  userInfo: { name: string };
 };
 
-export const StartGame: React.FC<Props> = ({ userName }) => {
+export const StartGame: React.FC<Props> = ({ userInfo }) => {
   const history = useHistory();
 
   const toStartGame = useCallback(() => {
     history.replace(ROUTES.PLAY);
-  }, [userName, history]);
+  }, [userInfo, history]);
 
   return (
     <div className='start-game-wrapper'>

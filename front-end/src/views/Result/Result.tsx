@@ -1,18 +1,24 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
-import { resetState, resetGameProgress } from './../../store/actions';
+import {
+  resetState,
+  resetGameProgress,
+  createStatistic,
+  getStatistic,
+} from './../../store/actions';
 import { ROUTES } from './../../routes';
-import { AnyAction } from 'redux';
 import { SnackbarError } from '../../components/SnackbarError';
 import './Result.scss';
 
 type Props = {
-  dispatch: (action: AnyAction) => void;
+  dispatch: (action: any) => void;
   timerInfo: string;
   snakePosition: number[];
   bestScore: number;
   error: string | null;
+  userInfo: { id: number };
+  dateAndTime: string;
 };
 
 export const Result: React.FC<Props> = ({
@@ -21,8 +27,23 @@ export const Result: React.FC<Props> = ({
   snakePosition,
   bestScore,
   error,
+  userInfo,
+  dateAndTime,
 }) => {
   const history = useHistory();
+
+  const showStatistic = async () => {
+    await dispatch(
+      createStatistic({
+        id: userInfo.id,
+        date: dateAndTime,
+        score: snakePosition.length - 1,
+        time: timerInfo,
+      })
+    );
+    await dispatch(getStatistic({ id: userInfo.id }));
+    history.replace(ROUTES.STATISTIC);
+  };
 
   return (
     <div className='result-page'>
@@ -68,8 +89,21 @@ export const Result: React.FC<Props> = ({
         >
           Try again
         </Button>
+        <Button
+          className='button'
+          variant='contained'
+          color='primary'
+          size='large'
+          onClick={() => {
+            showStatistic();
+          }}
+        >
+          Statistic
+        </Button>
       </div>
-      {error ? <SnackbarError error={error} message={'Cannot update score. '} /> : null}
+      {error ? (
+        <SnackbarError error={error} message={'Cannot update score. '} />
+      ) : null}
     </div>
   );
 };

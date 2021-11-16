@@ -6,14 +6,20 @@ import { Result } from './../views/Result/Result';
 import { ROUTES } from './../routes';
 import { useSelector, useDispatch } from 'react-redux';
 import { IState } from '../store/rootReducer';
+import { Statistic } from '../views/Statistic';
+import moment from 'moment';
 
 export const AppRouter: React.FC = () => {
   const snakePosition = useSelector((state: IState) => state.position);
   const timerInfo = useSelector((state: IState) => state.timerInfo);
   const bestScore = useSelector((state: IState) => state.bestScore);
   const error = useSelector((state: IState) => state.error);
+  const userInfo = useSelector((state: IState) => state.userInfo);
+  const statistic = useSelector((state: IState) => state.statistic);
   const dispatch = useDispatch();
+  const dateAndTime = moment().format('DD/MM/YYYY HH:mm:ss');
 
+  
   return (
     <>
       <BrowserRouter>
@@ -29,9 +35,18 @@ export const AppRouter: React.FC = () => {
                 snakePosition={snakePosition}
                 bestScore={bestScore}
                 error={error}
+                userInfo={userInfo}
+                dateAndTime={dateAndTime}
               />
             )}
           />
+          <Route path={ROUTES.STATISTIC} component={() => (
+            <Statistic 
+              dispatch={dispatch}
+              statistic={statistic}
+              error={error}
+            />
+          )} />
           <Redirect to={ROUTES.HOME} />
         </Switch>
       </BrowserRouter>
