@@ -14,18 +14,26 @@
       text-align: start;
       position: relative;
 
-      .sort-button {
-        cursor: pointer;
+      .arrows-wrapper {
+        width: 50px;
+        position: relative;
+        .sort-button {
+          cursor: pointer;
 
-        .arrowUp {
-          position: absolute;
-          bottom: 0;
-        }
+          .arrowUp {
+            position: absolute;
+            bottom: 0;
+          }
 
-        .arrowDown {
-          position: absolute;
-          bottom: 0;
-          left: 48px;
+          .arrowDown {
+            position: absolute;
+            bottom: 0;
+            left: 13px;
+          }
+
+          .active {
+            color: blue;
+          }
         }
       }
     }
