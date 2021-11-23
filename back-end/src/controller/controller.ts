@@ -1,7 +1,6 @@
 const database = require("../db");
 
 const getUsers = async (req: any, res: any) => {
-   console.log('work');
   const allUsers = await database.query("SELECT * FROM users");
   res.json(allUsers.rows);
 };
